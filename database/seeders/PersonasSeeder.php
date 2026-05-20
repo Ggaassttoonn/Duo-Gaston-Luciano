@@ -45,4 +45,9 @@ class PersonasSeeder extends Seeder
             ]
         ]);
     }
+
+    public function down(): void
+    {
+        DB::table('personas')->truncate();
+    }
 }
