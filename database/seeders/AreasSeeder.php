@@ -16,7 +16,7 @@ class AreasSeeder extends Seeder
         DB::table('areas')->insert([
             [
                 'area' => 'Lengua y Literatura',
-                'tipo' => 'básica'
+                'tipo' => 'básico'
             ],
             [
                 'area' => 'Matemática',

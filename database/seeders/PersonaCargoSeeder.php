@@ -17,7 +17,7 @@ class PersonaCargoSeeder extends Seeder
         $personas = Persona::all();
 
         $cargoDirector = Cargo::where('cargo', 'Director/a')->first();
-        $cargoMestro = Cargo::where('cargo', 'Maestro/a')->first();
+        $cargoMaestro = Cargo::where('cargo', 'Maestro/a')->first();
         $cargoSecretario = Cargo::where('cargo', 'Secretario/a')->first();
         $cargoPreceptor = Cargo::where('cargo', 'preceptor/a')->first();
         $cargoVicedirector = Cargo::where('cargo', 'Vice-director/a')->first();
