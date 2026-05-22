@@ -24,10 +24,20 @@ class CursadoController extends Controller
         return response()->json($cursados);
     }
 
+    public function create(): JsonResponse
+    {
+        return response()->json([]);
+    }
+
     public function show(Cursado $cursado): JsonResponse
     {
         $cursadoResuelto = $this->cursadoService->getById($cursado);
         return response()->json($cursadoResuelto);
+    }
+
+    public function edit(Cursado $cursado): JsonResponse
+    {
+        return response()->json($cursado);
     }
 
     // Inyectamos StoreCursadoRequest para validar automáticamente la creación
@@ -59,7 +69,4 @@ class CursadoController extends Controller
         return response()->json(['message' => 'Cursado eliminado exitosamente']);
     }
 
-        private CursadoServiceInterface $cursadoService
-  {
-}
 }

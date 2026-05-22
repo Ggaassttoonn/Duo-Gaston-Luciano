@@ -22,11 +22,21 @@ class CursoController extends Controller
         );
     }
 
+    public function create(): JsonResponse
+    {
+        return response()->json([]);
+    }
+
     public function show(Curso $curso): JsonResponse
     {
         return response()->json([
             'data' => $curso
         ]);
+    }
+
+    public function edit(Curso $curso): JsonResponse
+    {
+        return response()->json($curso);
     }
 
     public function store(StoreCursoRequest $request): JsonResponse
@@ -64,7 +74,5 @@ class CursoController extends Controller
             'message' => 'Curso eliminado exitosamente'
         ]);
     }
-    private CursoServiceInterface $cursoService
- {
-}
+
 }
