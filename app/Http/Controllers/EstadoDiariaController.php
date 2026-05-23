@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\EstadoDiaria;
 use App\Services\EstadoDiariaService;
-use App\Http\Requests\StoreEstadoDiariaRequest;
-use App\Http\Requests\UpdateEstadoDiariaRequest;
+use App\Http\Requests\EstadoDiaria\StoreEstadoDiariaRequest;
+use App\Http\Requests\EstadoDiaria\UpdateEstadoDiariaRequest;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\EstadoDiariaServiceInterface;
 class EstadoDiariaController extends Controller

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PersonaCargoCursado;
-use App\Http\Requests\StorePersonaCargoCursadoRequest;
-use App\Http\Requests\UpdatePersonaCargoCursadoRequest;
+use App\Http\Requests\PersonaCargoCursado\StorePersonaCargoCursadoRequest;
+use App\Http\Requests\PersonaCargoCursado\UpdatePersonaCargoCursadoRequest;
 use App\Services\PersonaCargoCursadoService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;

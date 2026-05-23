@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cursado;
 use App\Services\CursadoService;
-use App\Http\Requests\StoreCursadoRequest;
-use App\Http\Requests\UpdateCursadoRequest;
+use App\Http\Requests\Cursado\StoreCursadoRequest;
+use App\Http\Requests\Cursado\UpdateCursadoRequest;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\CursadoServiceInterface;
 

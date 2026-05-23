@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\EstadoAnual;
 use App\Services\EstadoAnualService;
-use App\Http\Requests\StoreEstadoAnualRequest;
-use App\Http\Requests\UpdateEstadoAnualRequest;
+use App\Http\Requests\EstadoAnual\StoreEstadoAnualRequest;
+use App\Http\Requests\EstadoAnual\UpdateEstadoAnualRequest;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\EstadoAnualServiceInterface;
 

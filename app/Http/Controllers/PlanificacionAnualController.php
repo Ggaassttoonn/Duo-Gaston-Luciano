@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PlanificacionAnual;
-use App\Http\Requests\StorePlanificacionAnualRequest;
-use App\Http\Requests\UpdatePlanificacionAnualRequest;
+use App\Http\Requests\PlanificacionAnual\StorePlanificacionAnualRequest;
+use App\Http\Requests\PlanificacionAnual\UpdatePlanificacionAnualRequest;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\PlanificacionAnualServiceInterface;
 

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\SitRevista;
-use App\Http\Requests\StoreSitRevistaRequest;
-use App\Http\Requests\UpdateSitRevistaRequest;
+use App\Http\Requests\SitRevista\StoreSitRevistaRequest;
+use App\Http\Requests\SitRevista\UpdateSitRevistaRequest;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\SitRevistaServiceInterface;
 

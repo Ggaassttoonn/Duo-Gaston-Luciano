@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\AreaServiceInterface;
-use App\Http\Requests\StoreAreaRequest;
-use App\Http\Requests\UpdateAreaRequest;
+use App\Http\Requests\Area\StoreAreaRequest;
+use App\Http\Requests\Area\UpdateAreaRequest;
 use App\Models\Area;
 use Illuminate\Http\JsonResponse;
 

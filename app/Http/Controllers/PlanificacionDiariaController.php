@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PlanificacionDiaria;
-use App\Http\Requests\StorePlanificacionDiariaRequest;
-use App\Http\Requests\UpdatePlanificacionDiariaRequest;
+use App\Http\Requests\PlanificacionDiaria\StorePlanificacionDiariaRequest;
+use App\Http\Requests\PlanificacionDiaria\UpdatePlanificacionDiariaRequest;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\PlanificacionDiariaServiceInterface;
 

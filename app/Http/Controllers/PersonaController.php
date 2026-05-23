@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Persona;
-use App\Http\Requests\StorePersonaRequest;
-use App\Http\Requests\UpdatePersonaRequest;
+use App\Http\Requests\Persona\StorePersonaRequest;
+use App\Http\Requests\Persona\UpdatePersonaRequest;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\PersonaServiceInterface;
 

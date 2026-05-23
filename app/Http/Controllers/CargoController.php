@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Cargo;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\CargoServiceInterface;
-use App\Http\Requests\StoreCargoRequest;
-use App\Http\Requests\UpdateCargoRequest;
+use App\Http\Requests\Cargo\StoreCargoRequest;
+use App\Http\Requests\Cargo\UpdateCargoRequest;
 
 class CargoController extends Controller
 {
