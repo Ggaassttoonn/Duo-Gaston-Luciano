@@ -1,32 +1,34 @@
 <?php
 
-namespace App\Contracts;
+namespace App\Contracts\Interfaces;
 
-use App\Models\EstadoAnual;
+use App\Models\Persona;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-interface EstadoAnualServiceInterface
+interface PersonaServiceInterface
 {
     public function getAllPaginated(
         int $perPage = 15
     ): LengthAwarePaginator;
 
     public function getById(
-        EstadoAnual $estadoAnual
-    ): EstadoAnual;
-
-    public function getSelectOptions(): array;
+        Persona $persona
+    ): Persona;
 
     public function create(
         array $data
-    ): EstadoAnual;
+    ): Persona;
 
     public function update(
-        EstadoAnual $estadoAnual,
+        Persona $persona,
         array $data
-    ): EstadoAnual;
+    ): Persona;
 
     public function delete(
-        EstadoAnual $estadoAnual
+        Persona $persona
+    ): bool;
+
+    public function restore(
+        Persona $persona
     ): bool;
 }

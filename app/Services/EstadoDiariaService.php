@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Contracts\EstadoDiariaRepositoryInterface;
-use App\Contracts\EstadoDiariaServiceInterface;
+use App\Contracts\Repositories\EstadoDiariaRepositoryInterface;
+use App\Contracts\Interfaces\EstadoDiariaServiceInterface;
 use App\Models\EstadoDiaria;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 

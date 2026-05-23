@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\PersonaCargoCursado;
 use App\Models\PlanificacionDiaria;
-use App\Contracts\PlanificacionDiariaServiceInterface;
+use App\Contracts\Interfaces\PlanificacionDiariaServiceInterface;
 use App\Contracts\Repositories\PlanificacionDiariaRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 

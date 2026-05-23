@@ -6,7 +6,7 @@ use App\Models\PersonaCargo;
 use App\Http\Requests\PersonaCargo\StorePersonaCargoRequest;
 use App\Http\Requests\PersonaCargo\UpdatePersonaCargoRequest;
 use Illuminate\Http\JsonResponse;
-use App\Contracts\PersonaCargoServiceInterface;
+use App\Contracts\Interfaces\PersonaCargoServiceInterface;
 
 class PersonaCargoController extends Controller
 {

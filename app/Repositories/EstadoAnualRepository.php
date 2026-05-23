@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Contracts\EstadoAnualRepositoryInterface;
+use App\Contracts\Repositories\EstadoAnualRepositoryInterface;
 use App\Models\EstadoAnual;
 use App\Models\PlanificacionAnual;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

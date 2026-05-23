@@ -1,32 +1,32 @@
 <?php
 
-namespace App\Contracts;
+namespace App\Contracts\Interfaces;
 
-use App\Models\PersonaCargo;
+use App\Models\PlanificacionAnual;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-interface PersonaCargoServiceInterface
+interface PlanificacionAnualServiceInterface
 {
     public function getAllPaginated(
         int $perPage = 15
     ): LengthAwarePaginator;
 
     public function getById(
-        PersonaCargo $personaCargo
-    ): PersonaCargo;
+        PlanificacionAnual $planificacionAnual
+    ): PlanificacionAnual;
 
     public function getSelectOptions(): array;
 
     public function create(
         array $data
-    ): PersonaCargo;
+    ): PlanificacionAnual;
 
     public function update(
-        PersonaCargo $personaCargo,
+        PlanificacionAnual $planificacionAnual,
         array $data
-    ): PersonaCargo;
+    ): PlanificacionAnual;
 
     public function delete(
-        PersonaCargo $personaCargo
+        PlanificacionAnual $planificacionAnual
     ): bool;
 }

@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Curso;
-use App\Contracts\CursoServiceInterface;
+use App\Contracts\Interfaces\CursoServiceInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class CursoService implements CursoServiceInterface

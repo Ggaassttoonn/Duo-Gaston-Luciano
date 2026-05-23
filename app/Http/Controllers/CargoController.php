@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cargo;
 use Illuminate\Http\JsonResponse;
-use App\Contracts\CargoServiceInterface;
+use App\Contracts\Interfaces\CargoServiceInterface;
 use App\Http\Requests\Cargo\StoreCargoRequest;
 use App\Http\Requests\Cargo\UpdateCargoRequest;
 

@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Services\CursoService;
 use App\Http\Requests\Curso\StoreCursoRequest;
 use App\Http\Requests\Curso\UpdateCursoRequest;
-use App\Contracts\CursoServiceInterface;
+use App\Contracts\Interfaces\CursoServiceInterface;
 class CursoController extends Controller
 {
     public function __construct(

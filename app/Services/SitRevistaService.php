@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\SitRevista;
-use App\Contracts\SitRevistaServiceInterface;
+use App\Contracts\Interfaces\SitRevistaServiceInterface;
 use App\Contracts\Repositories\SitRevistaRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 

@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Area;
-use App\Contracts\AreaServiceInterface;
+use App\Contracts\Interfaces\AreaServiceInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Contracts\Repositories\AreaRepositoryInterface;
 

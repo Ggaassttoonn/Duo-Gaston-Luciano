@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Cursado;
 use App\Models\PersonaCargo;
 use App\Models\PersonaCargoCursado;
-use App\Contracts\PersonaCargoCursadoServiceInterface;
+use App\Contracts\Interfaces\PersonaCargoCursadoServiceInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PersonaCargoCursadoService implements PersonaCargoCursadoServiceInterface

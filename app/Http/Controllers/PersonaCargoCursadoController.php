@@ -8,7 +8,7 @@ use App\Http\Requests\PersonaCargoCursado\UpdatePersonaCargoCursadoRequest;
 use App\Services\PersonaCargoCursadoService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Contracts\PersonaCargoCursadoServiceInterface;
+use App\Contracts\Interfaces\PersonaCargoCursadoServiceInterface;
 
 class PersonaCargoCursadoController extends Controller
 {

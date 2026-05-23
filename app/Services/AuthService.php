@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Contracts\AuthServiceInterface;
+use App\Contracts\Interfaces\AuthServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 

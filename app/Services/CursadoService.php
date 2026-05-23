@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cursado;
-use App\Contracts\CursadoServiceInterface;
+use App\Contracts\Interfaces\CursadoServiceInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Contracts\Repositories\CursadoRepositoryInterface;
 

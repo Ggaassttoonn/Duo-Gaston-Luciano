@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Persona;
-use App\Contracts\PersonaServiceInterface;
+use App\Contracts\Interfaces\PersonaServiceInterface;
 use App\Contracts\Repositories\PersonaRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 

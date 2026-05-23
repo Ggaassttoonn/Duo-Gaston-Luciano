@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cargo;
-use App\Contracts\CargoServiceInterface;
+use App\Contracts\Interfaces\CargoServiceInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Contracts\Repositories\CargoRepositoryInterface;
 

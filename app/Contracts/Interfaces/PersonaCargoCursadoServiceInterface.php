@@ -1,32 +1,32 @@
 <?php
 
-namespace App\Contracts;
+namespace App\Contracts\Interfaces;
 
-use App\Models\EstadoDiaria;
+use App\Models\PersonaCargoCursado;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-interface EstadoDiariaServiceInterface
+interface PersonaCargoCursadoServiceInterface
 {
     public function getAllPaginated(
         int $perPage = 15
     ): LengthAwarePaginator;
 
     public function getById(
-        EstadoDiaria $estadoDiaria
-    ): EstadoDiaria;
+        PersonaCargoCursado $personaCargoCursado
+    ): PersonaCargoCursado;
 
     public function getSelectOptions(): array;
 
     public function create(
         array $data
-    ): EstadoDiaria;
+    ): PersonaCargoCursado;
 
     public function update(
-        EstadoDiaria $estadoDiaria,
+        PersonaCargoCursado $personaCargoCursado,
         array $data
-    ): EstadoDiaria;
+    ): PersonaCargoCursado;
 
     public function delete(
-        EstadoDiaria $estadoDiaria
+        PersonaCargoCursado $personaCargoCursado
     ): bool;
 }

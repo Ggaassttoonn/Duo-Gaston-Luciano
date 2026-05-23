@@ -7,7 +7,7 @@ use App\Services\EstadoDiariaService;
 use App\Http\Requests\EstadoDiaria\StoreEstadoDiariaRequest;
 use App\Http\Requests\EstadoDiaria\UpdateEstadoDiariaRequest;
 use Illuminate\Http\JsonResponse;
-use App\Contracts\EstadoDiariaServiceInterface;
+use App\Contracts\Interfaces\EstadoDiariaServiceInterface;
 class EstadoDiariaController extends Controller
 {
     public function __construct(private EstadoDiariaService $estadoDiariaService)

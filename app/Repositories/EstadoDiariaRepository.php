@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Contracts\EstadoDiariaRepositoryInterface;
+use App\Contracts\Repositories\EstadoDiariaRepositoryInterface;
 use App\Models\EstadoDiaria;
 use App\Models\PlanificacionDiaria;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

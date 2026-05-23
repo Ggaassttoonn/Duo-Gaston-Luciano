@@ -7,7 +7,7 @@ use App\Services\EstadoAnualService;
 use App\Http\Requests\EstadoAnual\StoreEstadoAnualRequest;
 use App\Http\Requests\EstadoAnual\UpdateEstadoAnualRequest;
 use Illuminate\Http\JsonResponse;
-use App\Contracts\EstadoAnualServiceInterface;
+use App\Contracts\Interfaces\EstadoAnualServiceInterface;
 
 class EstadoAnualController extends Controller
 {

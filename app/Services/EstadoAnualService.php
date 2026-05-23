@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Contracts\EstadoAnualRepositoryInterface;
-use App\Contracts\EstadoAnualServiceInterface;
+use App\Contracts\Repositories\EstadoAnualRepositoryInterface;
+use App\Contracts\Interfaces\EstadoAnualServiceInterface;
 use App\Models\EstadoAnual;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 

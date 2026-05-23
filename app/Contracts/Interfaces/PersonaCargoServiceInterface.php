@@ -1,30 +1,32 @@
 <?php
 
-namespace App\Contracts;
+namespace App\Contracts\Interfaces;
 
-use App\Models\SitRevista;
+use App\Models\PersonaCargo;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-interface SitRevistaServiceInterface
+interface PersonaCargoServiceInterface
 {
     public function getAllPaginated(
         int $perPage = 15
     ): LengthAwarePaginator;
 
     public function getById(
-        SitRevista $sitRevista
-    ): SitRevista;
+        PersonaCargo $personaCargo
+    ): PersonaCargo;
+
+    public function getSelectOptions(): array;
 
     public function create(
         array $data
-    ): SitRevista;
+    ): PersonaCargo;
 
     public function update(
-        SitRevista $sitRevista,
+        PersonaCargo $personaCargo,
         array $data
-    ): SitRevista;
+    ): PersonaCargo;
 
     public function delete(
-        SitRevista $sitRevista
+        PersonaCargo $personaCargo
     ): bool;
 }

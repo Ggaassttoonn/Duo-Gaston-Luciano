@@ -6,7 +6,7 @@ use App\Models\SitRevista;
 use App\Http\Requests\SitRevista\StoreSitRevistaRequest;
 use App\Http\Requests\SitRevista\UpdateSitRevistaRequest;
 use Illuminate\Http\JsonResponse;
-use App\Contracts\SitRevistaServiceInterface;
+use App\Contracts\Interfaces\SitRevistaServiceInterface;
 
 class SitRevistaController extends Controller
 {

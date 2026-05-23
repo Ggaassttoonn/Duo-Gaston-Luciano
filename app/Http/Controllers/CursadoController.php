@@ -7,7 +7,7 @@ use App\Services\CursadoService;
 use App\Http\Requests\Cursado\StoreCursadoRequest;
 use App\Http\Requests\Cursado\UpdateCursadoRequest;
 use Illuminate\Http\JsonResponse;
-use App\Contracts\CursadoServiceInterface;
+use App\Contracts\Interfaces\CursadoServiceInterface;
 
 
 

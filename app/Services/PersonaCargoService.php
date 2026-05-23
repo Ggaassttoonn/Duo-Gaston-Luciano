@@ -6,7 +6,7 @@ use App\Models\Cargo;
 use App\Models\Persona;
 use App\Models\PersonaCargo;
 use App\Models\SitRevista;
-use App\Contracts\PersonaCargoServiceInterface;
+use App\Contracts\Interfaces\PersonaCargoServiceInterface;
 use App\Contracts\Repositories\PersonaCargoRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 

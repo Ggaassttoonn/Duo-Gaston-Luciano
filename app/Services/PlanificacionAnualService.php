@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Area;
 use App\Models\PersonaCargoCursado;
 use App\Models\PlanificacionAnual;
-use App\Contracts\PlanificacionAnualServiceInterface;
+use App\Contracts\Interfaces\PlanificacionAnualServiceInterface;
 use App\Contracts\Repositories\PlanificacionAnualRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 

@@ -6,7 +6,7 @@ use App\Models\Persona;
 use App\Http\Requests\Persona\StorePersonaRequest;
 use App\Http\Requests\Persona\UpdatePersonaRequest;
 use Illuminate\Http\JsonResponse;
-use App\Contracts\PersonaServiceInterface;
+use App\Contracts\Interfaces\PersonaServiceInterface;
 
 class PersonaController extends Controller
 {
