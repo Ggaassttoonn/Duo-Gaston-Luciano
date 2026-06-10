@@ -2,11 +2,15 @@
 
 namespace App\Contracts\Interfaces;
 
-use Illuminate\Http\JsonResponse;
-
 interface AuthServiceInterface
 {
-    public function login(array $credentials, bool $remember = false): array;
+    public function login(array $credentials): array;
+
+    public function register(array $data): array;
+
+    public function me(): array;
+
+    public function updateProfile(array $data): array;
 
     public function logout(): void;
 }

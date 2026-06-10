@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\Interfaces\AuthServiceInterface;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
@@ -16,8 +17,32 @@ class AuthController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         $result = $this->authService->login(
-            $request->only('email', 'password'),
-            $request->boolean('remember')
+            $request->only('email', 'password')
+        );
+
+        return response()->json($result, 200);
+    }
+
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        $result = $this->authService->register(
+            $request->only('name', 'email', 'password')
+        );
+
+        return response()->json($result, 201);
+    }
+
+    public function me(Request $request): JsonResponse
+    {
+        $result = $this->authService->me();
+
+        return response()->json($result, 200);
+    }
+
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $result = $this->authService->updateProfile(
+            $request->only('name', 'foto')
         );
 
         return response()->json($result, 200);

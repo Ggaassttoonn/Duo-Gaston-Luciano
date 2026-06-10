@@ -11,7 +11,7 @@ use App\Contracts\Interfaces\EstadoAnualServiceInterface;
 
 class EstadoAnualController extends Controller
 {
-    public function __construct(private EstadoAnualService $estadoAnualService)
+    public function __construct(private EstadoAnualServiceInterface $estadoAnualService)
     {
     }
 
@@ -67,7 +67,4 @@ class EstadoAnualController extends Controller
         return response()->json(['message' => 'Estado anual eliminado exitosamente']);
     }
    
-    private EstadoAnualServiceInterface $estadoAnualService
- {
-}
 }

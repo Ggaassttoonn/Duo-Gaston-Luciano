@@ -10,7 +10,7 @@ use Illuminate\Http\JsonResponse;
 use App\Contracts\Interfaces\EstadoDiariaServiceInterface;
 class EstadoDiariaController extends Controller
 {
-    public function __construct(private EstadoDiariaService $estadoDiariaService)
+    public function __construct(private EstadoDiariaServiceInterface $estadoDiariaService)
     {
     }
 
@@ -66,7 +66,4 @@ class EstadoDiariaController extends Controller
         return response()->json(['message' => 'Estado diario eliminado exitosamente']);
     }
     
-    private EstadoDiariaServiceInterface $estadoDiariaService
- {
-}
 }

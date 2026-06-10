@@ -12,7 +12,7 @@ use App\Contracts\Interfaces\PersonaCargoCursadoServiceInterface;
 
 class PersonaCargoCursadoController extends Controller
 {
-    public function __construct(private PersonaCargoCursadoService $personaCargoCursadoService)
+    public function __construct(private PersonaCargoCursadoServiceInterface $personaCargoCursadoService)
     {
     }
 
@@ -58,7 +58,4 @@ class PersonaCargoCursadoController extends Controller
         return response()->json(null, 204);
     }
 
-    private PersonaCargoCursadoServiceInterface $personaCargoCursadoService
- {
-}
 }

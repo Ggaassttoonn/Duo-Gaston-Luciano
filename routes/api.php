@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CursadoController;
@@ -15,7 +16,14 @@ use App\Http\Controllers\PlanificacionAnualController;
 use App\Http\Controllers\PlanificacionDiariaController;
 use App\Http\Controllers\SitRevistaController;
 
+Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/auth/me', [AuthController::class, 'me'])->name('auth.me');
+    Route::put('/auth/profile', [AuthController::class, 'updateProfile'])->name('auth.profile');
+    Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
+});
 
 // Listado de áreas (index) -> renderiza areas.index
 Route::get('/areas', [AreaController::class, 'index'])->name('areas.index');
