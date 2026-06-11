@@ -48,6 +48,22 @@ class AuthController extends Controller
         return response()->json($result, 200);
     }
 
+    public function updatePreferences(Request $request): JsonResponse
+    {
+        $result = $this->authService->updatePreferences(
+            $request->input('preferences', [])
+        );
+
+        return response()->json($result, 200);
+    }
+
+    public function getPreferences(Request $request): JsonResponse
+    {
+        $result = $this->authService->getPreferences();
+
+        return response()->json($result, 200);
+    }
+
     public function logout(Request $request): JsonResponse
     {
         $this->authService->logout();

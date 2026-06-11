@@ -12,5 +12,9 @@ interface AuthServiceInterface
 
     public function updateProfile(array $data): array;
 
+    public function updatePreferences(array $preferences): array;
+
+    public function getPreferences(): array;
+
     public function logout(): void;
 }
