@@ -27,6 +27,8 @@ use App\Contracts\Interfaces\PlanificacionDiariaServiceInterface;
 use App\Services\PlanificacionDiariaService;
 use App\Contracts\Interfaces\AuthServiceInterface;
 use App\Services\AuthService;
+use App\Contracts\Interfaces\PlanillaServiceInterface;
+use App\Services\PlanillaService;
 use App\Contracts\Interfaces\SitRevistaServiceInterface;
 use App\Services\SitRevistaService;
 use App\Repositories\AreaRepository;
@@ -49,6 +51,8 @@ use App\Contracts\Repositories\PlanificacionAnualRepositoryInterface;
 use App\Repositories\PlanificacionAnualRepository;
 use App\Contracts\Repositories\PlanificacionDiariaRepositoryInterface;
 use App\Repositories\PlanificacionDiariaRepository;
+use App\Contracts\Repositories\PlanillaRepositoryInterface;
+use App\Repositories\PlanillaRepository;
 use App\Contracts\Repositories\SitRevistaRepositoryInterface;
 use App\Repositories\SitRevistaRepository;
 
@@ -108,6 +112,16 @@ $this->app->bind(
         $this->app->bind(
             AuthServiceInterface::class,
             AuthService::class
+        );
+
+        $this->app->bind(
+            PlanillaServiceInterface::class,
+            PlanillaService::class
+        );
+
+        $this->app->bind(
+            PlanillaRepositoryInterface::class,
+            PlanillaRepository::class
         );
 
         $this->app->bind(

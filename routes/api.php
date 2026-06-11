@@ -14,6 +14,7 @@ use App\Http\Controllers\PersonaCargoCursadoController;
 use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\PlanificacionAnualController;
 use App\Http\Controllers\PlanificacionDiariaController;
+use App\Http\Controllers\PlanillaController;
 use App\Http\Controllers\SitRevistaController;
 use App\Models\Users;
 
@@ -47,6 +48,12 @@ Route::middleware('auth:sanctum')->group(function () {
         $user->save();
         return response()->json(['message' => 'Rol actualizado correctamente.']);
     });
+
+    Route::get('/planillas', [PlanillaController::class, 'index'])->name('planillas.index');
+    Route::post('/planillas', [PlanillaController::class, 'store'])->name('planillas.store');
+    Route::put('/planillas/{id}', [PlanillaController::class, 'update'])->name('planillas.update');
+    Route::get('/planillas-recibidas', [PlanillaController::class, 'recibidas'])->name('planillas.recibidas');
+    Route::put('/planillas/{id}/revision', [PlanillaController::class, 'revision'])->name('planillas.revision');
 });
 
 // Listado de áreas (index) -> renderiza areas.index
