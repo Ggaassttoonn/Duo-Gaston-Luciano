@@ -15,6 +15,7 @@ use App\Http\Controllers\PersonaController;
 use App\Http\Controllers\PlanificacionAnualController;
 use App\Http\Controllers\PlanificacionDiariaController;
 use App\Http\Controllers\SitRevistaController;
+use App\Models\Users;
 
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
@@ -23,6 +24,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me'])->name('auth.me');
     Route::put('/auth/profile', [AuthController::class, 'updateProfile'])->name('auth.profile');
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
+
+    Route::get('/users', function () {
+        return \App\Models\Users::select('id', 'name', 'email', 'role', 'created_at')->get();
+    });
+
+    Route::delete('/users/{id}', function ($id) {
+        $user = \App\Models\Users::findOrFail($id);
+        if ($user->role === 'admin') {
+            return response()->json(['message' => 'No se puede eliminar un administrador.'], 403);
+        }
+        $user->delete();
+        return response()->json(['message' => 'Usuario eliminado correctamente.']);
+    });
+
+    Route::put('/users/{id}/role', function (\Illuminate\Http\Request $request, $id) {
+        $user = \App\Models\Users::findOrFail($id);
+        if ($user->role === 'admin') {
+            return response()->json(['message' => 'No se puede cambiar el rol de un administrador.'], 403);
+        }
+        $user->role = $request->input('role');
+        $user->save();
+        return response()->json(['message' => 'Rol actualizado correctamente.']);
+    });
 });
 
 // Listado de áreas (index) -> renderiza areas.index

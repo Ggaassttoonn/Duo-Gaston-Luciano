@@ -7,6 +7,7 @@ use App\Models\Persona;
 use App\Models\Users;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class AuthService implements AuthServiceInterface
@@ -28,12 +29,12 @@ class AuthService implements AuthServiceInterface
         return [
             'token'      => $token,
             'user'       => [
+                'id'    => $user->id,
                 'name'  => $user->name,
                 'email' => $user->email,
+                'role'  => $user->role,
+                'foto'  => $user->foto,
             ],
-            'role'       => $user->role,
-            'persona_id' => $user->persona_id,
-            'foto'       => null,
         ];
     }
 
@@ -58,7 +59,7 @@ class AuthService implements AuthServiceInterface
             'name'       => $data['name'],
             'email'      => $data['email'],
             'password'   => $data['password'],
-            'role'       => 'docente',
+            'role'       => $data['role'] ?? 'docente',
         ]);
 
         $token = $user->createToken('api')->plainTextToken;
@@ -66,12 +67,12 @@ class AuthService implements AuthServiceInterface
         return [
             'token'      => $token,
             'user'       => [
+                'id'    => $user->id,
                 'name'  => $user->name,
                 'email' => $user->email,
+                'role'  => $user->role,
+                'foto'  => null,
             ],
-            'role'       => $user->role,
-            'persona_id' => $user->persona_id,
-            'foto'       => null,
         ];
     }
 
@@ -87,12 +88,12 @@ class AuthService implements AuthServiceInterface
 
         return [
             'user'       => [
+                'id'    => $user->id,
                 'name'  => $user->name,
                 'email' => $user->email,
+                'role'  => $user->role,
+                'foto'  => $user->foto,
             ],
-            'role'       => $user->role,
-            'persona_id' => $user->persona_id,
-            'foto'       => null,
         ];
     }
 
@@ -109,18 +110,34 @@ class AuthService implements AuthServiceInterface
         }
 
         if (isset($data['foto'])) {
-            // Store foto handling logic here
+            $user->foto = $this->saveFoto($data['foto']);
         }
 
         $user->save();
 
+        $user->load('persona');
+
         return [
             'message' => 'Perfil actualizado correctamente.',
             'user'    => [
+                'id'    => $user->id,
                 'name'  => $user->name,
                 'email' => $user->email,
+                'role'  => $user->role,
+                'foto'  => $user->foto,
             ],
         ];
+    }
+
+    private function saveFoto(string $dataUrl): string
+    {
+        $imageData = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $dataUrl));
+
+        $filename = 'fotos/' . uniqid() . '.png';
+
+        Storage::disk('public')->put($filename, $imageData);
+
+        return Storage::disk('public')->url($filename);
     }
 
     public function logout(): void

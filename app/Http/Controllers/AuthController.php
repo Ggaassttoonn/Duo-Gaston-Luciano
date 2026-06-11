@@ -26,7 +26,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request): JsonResponse
     {
         $result = $this->authService->register(
-            $request->only('name', 'email', 'password')
+            $request->only('name', 'email', 'password', 'role')
         );
 
         return response()->json($result, 201);
