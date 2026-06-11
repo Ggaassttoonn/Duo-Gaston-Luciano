@@ -51,7 +51,7 @@ class AuthController extends Controller
     public function updatePreferences(Request $request): JsonResponse
     {
         $result = $this->authService->updatePreferences(
-            $request->input('preferences', [])
+            $request->all()
         );
 
         return response()->json($result, 200);

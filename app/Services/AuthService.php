@@ -23,8 +23,7 @@ class AuthService implements AuthServiceInterface
             ]);
         }
 
-        Auth::guard('web')->login($user);
-        request()->session()->regenerate();
+        $token = $user->createToken('auth-token')->plainTextToken;
 
         $user->load('persona');
 
@@ -40,6 +39,7 @@ class AuthService implements AuthServiceInterface
                 'role'  => $user->role,
                 'foto'  => $user->foto,
             ],
+            'token'      => $token,
             'role'       => $user->role,
             'foto'       => $user->foto,
             'persona_id' => $user->persona_id,
@@ -51,17 +51,19 @@ class AuthService implements AuthServiceInterface
     {
         $parts = explode(' ', $data['name'], 2);
         $nombres = $parts[0];
-        $apellidos = $parts[1] ?? '';
+        $apellidos = $parts[1] ?? $nombres;
 
-        $persona = Persona::create([
-            'apellidos'        => $apellidos,
-            'nombres'          => $nombres,
-            'dni'              => 'TEMP-' . uniqid(),
-            'e-mail'           => $data['email'],
-            'telefono'         => '',
-            'direccion'        => '',
-            'fecha_nacimiento' => now()->toDateString(),
-        ]);
+        $persona = Persona::firstOrCreate(
+            ['e-mail' => $data['email']],
+            [
+                'apellidos'        => $apellidos,
+                'nombres'          => $nombres,
+                'dni'              => 'TEMP-' . uniqid(),
+                'telefono'         => '',
+                'direccion'        => '',
+                'fecha_nacimiento' => now()->toDateString(),
+            ]
+        );
 
         $user = Users::create([
             'persona_id' => $persona->id,
@@ -71,8 +73,7 @@ class AuthService implements AuthServiceInterface
             'role'       => $data['role'] ?? 'docente',
         ]);
 
-        Auth::guard('web')->login($user);
-        request()->session()->regenerate();
+        $token = $user->createToken('auth-token')->plainTextToken;
 
         return [
             'user' => [
@@ -82,6 +83,7 @@ class AuthService implements AuthServiceInterface
                 'role'  => $user->role,
                 'foto'  => null,
             ],
+            'token'      => $token,
             'role'       => $user->role,
             'foto'       => null,
             'persona_id' => $user->persona_id,
@@ -201,8 +203,9 @@ class AuthService implements AuthServiceInterface
 
     public function logout(): void
     {
-        Auth::guard('web')->logout();
-        request()->session()->invalidate();
-        request()->session()->regenerateToken();
+        $user = Auth::user();
+        if ($user) {
+            $user->tokens()->delete();
+        }
     }
 }
