@@ -6,6 +6,7 @@ use App\Models\Cursado;
 use App\Services\CursadoService;
 use App\Http\Requests\Cursado\StoreCursadoRequest;
 use App\Http\Requests\Cursado\UpdateCursadoRequest;
+use App\Http\Resources\CursadoResource;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\Interfaces\CursadoServiceInterface;
 
@@ -21,46 +22,27 @@ class CursadoController extends Controller
     public function index(): JsonResponse
     {
         $cursados = $this->cursadoService->getAllPaginated();
-        return response()->json($cursados);
-    }
-
-    public function create(): JsonResponse
-    {
-        return response()->json([]);
+        return CursadoResource::collection($cursados)->response();
     }
 
     public function show(Cursado $cursado): JsonResponse
     {
         $cursadoResuelto = $this->cursadoService->getById($cursado);
-        return response()->json($cursadoResuelto);
+        return response()->json(CursadoResource::make($cursadoResuelto));
     }
 
-    public function edit(Cursado $cursado): JsonResponse
-    {
-        return response()->json($cursado);
-    }
-
-    // Inyectamos StoreCursadoRequest para validar automáticamente la creación
     public function store(StoreCursadoRequest $request): JsonResponse
     {
-        // $request->validated() ya nos da los datos limpios y validados
         $cursado = $this->cursadoService->create($request->validated());
         
-        return response()->json([
-            'message' => 'Cursado creado exitosamente',
-            'data' => $cursado
-        ], 201);
+        return response()->json(CursadoResource::make($cursado), 201);
     }
 
-    // Inyectamos UpdateCursadoRequest para validar la actualización
     public function update(UpdateCursadoRequest $request, Cursado $cursado): JsonResponse
     {
         $cursadoActualizado = $this->cursadoService->update($cursado, $request->validated());
         
-        return response()->json([
-            'message' => 'Cursado actualizado exitosamente',
-            'data' => $cursadoActualizado
-        ]);
+        return response()->json(CursadoResource::make($cursadoActualizado));
     }
 
     public function destroy(Cursado $cursado): JsonResponse

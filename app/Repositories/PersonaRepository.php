@@ -10,7 +10,7 @@ class PersonaRepository implements PersonaRepositoryInterface
 {
     public function getAllPaginated(int $perPage = 15): LengthAwarePaginator
     {
-        return Persona::paginate($perPage);
+        return Persona::with('cargos')->paginate($perPage);
     }
 
     public function getById(Persona $persona): Persona

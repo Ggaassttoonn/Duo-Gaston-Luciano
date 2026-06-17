@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Contracts\Interfaces\CargoServiceInterface;
 use App\Http\Requests\Cargo\StoreCargoRequest;
 use App\Http\Requests\Cargo\UpdateCargoRequest;
+use App\Http\Resources\CargoResource;
 
 class CargoController extends Controller
 {
@@ -19,31 +20,21 @@ class CargoController extends Controller
     {
         $cargos = $this->cargoService->getAllPaginated();
 
-        return response()->json($cargos);
+        return CargoResource::collection($cargos)->response();
     }
 
     public function show(Cargo $cargo): JsonResponse
     {
         $cargoResuelto = $this->cargoService->getById($cargo);
 
-        return response()->json($cargoResuelto);
-    }
-
-    public function create(): JsonResponse
-    {
-        return response()->json([]);
+        return response()->json(CargoResource::make($cargoResuelto));
     }
 
     public function store(StoreCargoRequest $request): JsonResponse
     {
         $cargo = $this->cargoService->create($request->validated());
 
-        return response()->json($cargo, 201);
-    }
-
-    public function edit(Cargo $cargo): JsonResponse
-    {
-        return response()->json($cargo);
+        return response()->json(CargoResource::make($cargo), 201);
     }
 
     public function update(UpdateCargoRequest $request, Cargo $cargo): JsonResponse
@@ -53,7 +44,7 @@ class CargoController extends Controller
             $request->validated()
         );
 
-        return response()->json($cargoActualizado);
+        return response()->json(CargoResource::make($cargoActualizado));
     }
 
     public function destroy(Cargo $cargo): JsonResponse

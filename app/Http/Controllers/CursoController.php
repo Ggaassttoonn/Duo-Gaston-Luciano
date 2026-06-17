@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Services\CursoService;
 use App\Http\Requests\Curso\StoreCursoRequest;
 use App\Http\Requests\Curso\UpdateCursoRequest;
+use App\Http\Resources\CursoResource;
 use App\Contracts\Interfaces\CursoServiceInterface;
 class CursoController extends Controller
 {
@@ -17,26 +18,14 @@ class CursoController extends Controller
 
     public function index(): JsonResponse
     {
-        return response()->json(
+        return CursoResource::collection(
             $this->cursoService->getAllPaginated()
-        );
-    }
-
-    public function create(): JsonResponse
-    {
-        return response()->json([]);
+        )->response();
     }
 
     public function show(Curso $curso): JsonResponse
     {
-        return response()->json([
-            'data' => $curso
-        ]);
-    }
-
-    public function edit(Curso $curso): JsonResponse
-    {
-        return response()->json($curso);
+        return response()->json(CursoResource::make($curso));
     }
 
     public function store(StoreCursoRequest $request): JsonResponse
@@ -45,10 +34,7 @@ class CursoController extends Controller
             $request->validated()
         );
 
-        return response()->json([
-            'message' => 'Curso creado exitosamente',
-            'data' => $curso
-        ], 201);
+        return response()->json(CursoResource::make($curso), 201);
     }
 
     public function update(
@@ -60,10 +46,7 @@ class CursoController extends Controller
             $request->validated()
         );
 
-        return response()->json([
-            'message' => 'Curso actualizado exitosamente',
-            'data' => $cursoActualizado
-        ]);
+        return response()->json(CursoResource::make($cursoActualizado));
     }
 
     public function destroy(Curso $curso): JsonResponse

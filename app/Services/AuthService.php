@@ -192,9 +192,29 @@ class AuthService implements AuthServiceInterface
 
     private function saveFoto(string $dataUrl): string
     {
-        $imageData = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $dataUrl));
+        if (!preg_match('/^data:image\/(jpeg|png|gif|webp);base64,/', $dataUrl)) {
+            throw ValidationException::withMessages([
+                'foto' => ['Formato de imagen no válido. Solo se permiten JPEG, PNG, GIF y WebP.'],
+            ]);
+        }
 
-        $filename = 'fotos/' . uniqid() . '.png';
+        $imageData = base64_decode(
+            preg_replace('/^data:image\/\w+;base64,/', '', $dataUrl)
+        );
+
+        $maxSize = 2 * 1024 * 1024;
+
+        if (strlen($imageData) > $maxSize) {
+            throw ValidationException::withMessages([
+                'foto' => ['La imagen no debe superar los 2 MB.'],
+            ]);
+        }
+
+        $extension = strtolower(
+            preg_replace('/^data:image\/(\w+);base64,/', '$1', $dataUrl)
+        );
+
+        $filename = 'fotos/' . uniqid() . '.' . $extension;
 
         Storage::disk('public')->put($filename, $imageData);
 

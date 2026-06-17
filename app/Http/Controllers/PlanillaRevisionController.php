@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PlanillaRevision;
+use App\Http\Resources\PlanillaRevisionResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class PlanillaRevisionController extends Controller
             ->with('planilla')
             ->get();
 
-        return response()->json($revisions);
+        return PlanillaRevisionResource::collection($revisions)->response();
     }
 
     public function store(Request $request): JsonResponse
@@ -37,6 +38,6 @@ class PlanillaRevisionController extends Controller
 
         $revision->load('director');
 
-        return response()->json($revision, 201);
+        return response()->json(PlanillaRevisionResource::make($revision), 201);
     }
 }

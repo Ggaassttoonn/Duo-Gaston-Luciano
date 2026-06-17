@@ -11,7 +11,7 @@ class CargoRepository implements CargoRepositoryInterface
     public function getAllPaginated(
         int $perPage = 15
     ): LengthAwarePaginator {
-        return Cargo::paginate($perPage);
+        return Cargo::with('personaCargos')->paginate($perPage);
     }
 
     public function getById(

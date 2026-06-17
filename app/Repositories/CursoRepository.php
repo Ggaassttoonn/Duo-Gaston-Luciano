@@ -11,7 +11,7 @@ class CursoRepository implements CursoRepositoryInterface
     public function getAllPaginated(
         int $perPage = 15
     ): LengthAwarePaginator {
-        return Curso::paginate($perPage);
+        return Curso::with('cursados')->paginate($perPage);
     }
 
     public function getById(

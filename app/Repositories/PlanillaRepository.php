@@ -19,13 +19,16 @@ class PlanillaRepository implements PlanillaRepositoryInterface
 
     public function getByDirectorId(int $directorId): Collection
     {
-        return PlanillaDestinatario::with('planilla.persona')
-            ->where('director_id', $directorId)
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->pluck('planilla')
-            ->unique('id')
-            ->values();
+        return new Collection(
+            PlanillaDestinatario::with('planilla.persona')
+                ->where('director_id', $directorId)
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->pluck('planilla')
+                ->unique('id')
+                ->values()
+                ->all()
+        );
     }
 
     public function findById(int $id): ?Planilla

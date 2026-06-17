@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PersonaCargoCursado;
 use App\Http\Requests\PersonaCargoCursado\StorePersonaCargoCursadoRequest;
 use App\Http\Requests\PersonaCargoCursado\UpdatePersonaCargoCursadoRequest;
+use App\Http\Resources\PersonaCargoCursadoResource;
 use App\Services\PersonaCargoCursadoService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -19,37 +20,25 @@ class PersonaCargoCursadoController extends Controller
     public function index(): JsonResponse
     {
         $personaCargoCursados = $this->personaCargoCursadoService->getAllPaginated();
-        return response()->json($personaCargoCursados);
+        return PersonaCargoCursadoResource::collection($personaCargoCursados)->response();
     }
 
     public function show(PersonaCargoCursado $personaCargoCursado): JsonResponse
     {
         $personaCargoCursadoResuelto = $this->personaCargoCursadoService->getById($personaCargoCursado);
-        return response()->json($personaCargoCursadoResuelto);
-    }
-
-    public function create(): JsonResponse
-    {
-        $options = $this->personaCargoCursadoService->getSelectOptions();
-        return response()->json($options);
+        return response()->json(PersonaCargoCursadoResource::make($personaCargoCursadoResuelto));
     }
 
     public function store(StorePersonaCargoCursadoRequest $request): JsonResponse
     {
         $personaCargoCursado = $this->personaCargoCursadoService->create($request->validated());
-        return response()->json($personaCargoCursado, 201);
-    }
-
-    public function edit(PersonaCargoCursado $personaCargoCursado): JsonResponse
-    {
-        $options = $this->personaCargoCursadoService->getSelectOptions();
-        return response()->json(['personaCargoCursado' => $personaCargoCursado] + $options);
+        return response()->json(PersonaCargoCursadoResource::make($personaCargoCursado), 201);
     }
 
     public function update(UpdatePersonaCargoCursadoRequest $request, PersonaCargoCursado $personaCargoCursado): JsonResponse
     {
         $personaCargoCursadoActualizada = $this->personaCargoCursadoService->update($personaCargoCursado, $request->validated());
-        return response()->json($personaCargoCursadoActualizada);
+        return response()->json(PersonaCargoCursadoResource::make($personaCargoCursadoActualizada));
     }
 
     public function destroy(PersonaCargoCursado $personaCargoCursado): JsonResponse

@@ -24,7 +24,7 @@ class AreasSeeder extends Seeder
             ],
             [
                 'area' => 'Ciencias Sociales',
-                'Tipo' => 'básico'
+                'tipo' => 'básico'
             ],
             [
                 'area' => 'Ciencias Naturales',

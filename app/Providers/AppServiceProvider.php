@@ -55,6 +55,20 @@ use App\Contracts\Repositories\PlanillaRepositoryInterface;
 use App\Repositories\PlanillaRepository;
 use App\Contracts\Repositories\SitRevistaRepositoryInterface;
 use App\Repositories\SitRevistaRepository;
+use App\Contracts\Repositories\NotificationRepositoryInterface;
+use App\Repositories\NotificationRepository;
+use App\Contracts\Repositories\PlanillaDestinatarioRepositoryInterface;
+use App\Repositories\PlanillaDestinatarioRepository;
+use App\Contracts\Repositories\PlanillaRevisionRepositoryInterface;
+use App\Repositories\PlanillaRevisionRepository;
+use App\Contracts\Repositories\PlanillaStateRepositoryInterface;
+use App\Repositories\PlanillaStateRepository;
+use App\Contracts\Repositories\SentReportRepositoryInterface;
+use App\Repositories\SentReportRepository;
+use App\Contracts\Repositories\UserPreferenceRepositoryInterface;
+use App\Repositories\UserPreferenceRepository;
+use App\Contracts\Repositories\UsersRepositoryInterface;
+use App\Repositories\UsersRepository;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -72,43 +86,49 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(
-    CursadoServiceInterface::class,
-    CursadoService::class
+            CursadoServiceInterface::class,
+            CursadoService::class
+        );
 
+        $this->app->bind(
+            CursoServiceInterface::class,
+            CursoService::class
+        );
 
-);
-$this->app->bind(
-    CursoServiceInterface::class,
-    CursoService::class
-);
-$this->app->bind(
-    EstadoAnualServiceInterface::class,
-    EstadoAnualService::class
-);
-$this->app->bind(
-    EstadoDiariaServiceInterface::class,
-    EstadoDiariaService::class
-);
-$this->app->bind(
-    PersonaCargoServiceInterface::class,
-    PersonaCargoService::class
-);
-$this->app->bind(
-    PersonaCargoCursadoServiceInterface::class,
-    PersonaCargoCursadoService::class
-);
-$this->app->bind(
-    PersonaServiceInterface::class,
-    PersonaService::class
-);
-$this->app->bind(
-    PlanificacionAnualServiceInterface::class,
-    PlanificacionAnualService::class
-);
-$this->app->bind(
-    PlanificacionDiariaServiceInterface::class,
-    PlanificacionDiariaService::class
-);
+        $this->app->bind(
+            EstadoAnualServiceInterface::class,
+            EstadoAnualService::class
+        );
+
+        $this->app->bind(
+            EstadoDiariaServiceInterface::class,
+            EstadoDiariaService::class
+        );
+
+        $this->app->bind(
+            PersonaCargoServiceInterface::class,
+            PersonaCargoService::class
+        );
+
+        $this->app->bind(
+            PersonaCargoCursadoServiceInterface::class,
+            PersonaCargoCursadoService::class
+        );
+
+        $this->app->bind(
+            PersonaServiceInterface::class,
+            PersonaService::class
+        );
+
+        $this->app->bind(
+            PlanificacionAnualServiceInterface::class,
+            PlanificacionAnualService::class
+        );
+
+        $this->app->bind(
+            PlanificacionDiariaServiceInterface::class,
+            PlanificacionDiariaService::class
+        );
         $this->app->bind(
             AuthServiceInterface::class,
             AuthService::class
@@ -153,35 +173,70 @@ $this->app->bind(
             SitRevistaServiceInterface::class,
             SitRevistaService::class
         );
-$this->app->bind(
-    AreaRepositoryInterface::class,
-    AreaRepository::class
-);
-$this->app->bind(
-    CargoRepositoryInterface::class,
-    CargoRepository::class
-);
-$this->app->bind(
-    CursadoRepositoryInterface::class,
-    CursadoRepository::class
-);
-$this->app->bind(
-    CursoRepositoryInterface::class,
-    CursoRepository::class
-);
-{
-    $this->app->bind(
-        EstadoAnualRepositoryInterface::class,
-        EstadoAnualRepository::class
-    );
-}
+        $this->app->bind(
+            AreaRepositoryInterface::class,
+            AreaRepository::class
+        );
 
-{
-    $this->app->bind(
-        EstadoDiariaRepositoryInterface::class,
-        EstadoDiariaRepository::class
-    );
-}
+        $this->app->bind(
+            CargoRepositoryInterface::class,
+            CargoRepository::class
+        );
+
+        $this->app->bind(
+            CursadoRepositoryInterface::class,
+            CursadoRepository::class
+        );
+
+        $this->app->bind(
+            CursoRepositoryInterface::class,
+            CursoRepository::class
+        );
+
+        $this->app->bind(
+            EstadoAnualRepositoryInterface::class,
+            EstadoAnualRepository::class
+        );
+
+        $this->app->bind(
+            EstadoDiariaRepositoryInterface::class,
+            EstadoDiariaRepository::class
+        );
+
+        $this->app->bind(
+            NotificationRepositoryInterface::class,
+            NotificationRepository::class
+        );
+
+        $this->app->bind(
+            PlanillaDestinatarioRepositoryInterface::class,
+            PlanillaDestinatarioRepository::class
+        );
+
+        $this->app->bind(
+            PlanillaRevisionRepositoryInterface::class,
+            PlanillaRevisionRepository::class
+        );
+
+        $this->app->bind(
+            PlanillaStateRepositoryInterface::class,
+            PlanillaStateRepository::class
+        );
+
+        $this->app->bind(
+            SentReportRepositoryInterface::class,
+            SentReportRepository::class
+        );
+
+        $this->app->bind(
+            UserPreferenceRepositoryInterface::class,
+            UserPreferenceRepository::class
+        );
+
+        $this->app->bind(
+            UsersRepositoryInterface::class,
+            UsersRepository::class
+        );
 
     }
 }

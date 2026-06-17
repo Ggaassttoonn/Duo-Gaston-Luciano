@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification;
+use App\Http\Resources\NotificationResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class NotificationController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json($notifications);
+        return NotificationResource::collection($notifications)->response();
     }
 
     public function store(Request $request): JsonResponse
@@ -31,7 +32,7 @@ class NotificationController extends Controller
 
         $notification = Notification::create($data);
 
-        return response()->json($notification, 201);
+        return response()->json(NotificationResource::make($notification), 201);
     }
 
     public function markRead(Request $request, Notification $notification): JsonResponse
@@ -42,7 +43,7 @@ class NotificationController extends Controller
 
         $notification->update(['read' => true]);
 
-        return response()->json($notification);
+        return response()->json(NotificationResource::make($notification));
     }
 
     public function markAllRead(Request $request): JsonResponse

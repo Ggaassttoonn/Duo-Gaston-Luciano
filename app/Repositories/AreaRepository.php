@@ -11,7 +11,7 @@ class AreaRepository implements AreaRepositoryInterface
     public function getAllPaginated(
         int $perPage = 15
     ): LengthAwarePaginator {
-        return Area::paginate($perPage);
+        return Area::with('planificacionesAnuales')->paginate($perPage);
     }
 
     public function getById(

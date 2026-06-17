@@ -99,9 +99,29 @@ class PlanillaService implements PlanillaServiceInterface
 
     private function saveAudio(string $dataUrl): string
     {
-        $audioData = base64_decode(preg_replace('/^data:audio\/\w+;base64,/', '', $dataUrl));
+        if (!preg_match('/^data:audio\/(webm|mp3|wav|ogg);base64,/', $dataUrl)) {
+            throw ValidationException::withMessages([
+                'audio' => ['Formato de audio no válido. Solo se permiten WebM, MP3, WAV y OGG.'],
+            ]);
+        }
 
-        $filename = 'audios/' . uniqid() . '.webm';
+        $audioData = base64_decode(
+            preg_replace('/^data:audio\/\w+;base64,/', '', $dataUrl)
+        );
+
+        $maxSize = 10 * 1024 * 1024;
+
+        if (strlen($audioData) > $maxSize) {
+            throw ValidationException::withMessages([
+                'audio' => ['El audio no debe superar los 10 MB.'],
+            ]);
+        }
+
+        $extension = strtolower(
+            preg_replace('/^data:audio\/(\w+);base64,/', '$1', $dataUrl)
+        );
+
+        $filename = 'audios/' . uniqid() . '.' . $extension;
 
         \Illuminate\Support\Facades\Storage::disk('public')->put($filename, $audioData);
 

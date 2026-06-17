@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Contracts\Interfaces\AuthServiceInterface;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UsersResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 

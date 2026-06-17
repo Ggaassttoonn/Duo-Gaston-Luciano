@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PersonaCargo;
 use App\Http\Requests\PersonaCargo\StorePersonaCargoRequest;
 use App\Http\Requests\PersonaCargo\UpdatePersonaCargoRequest;
+use App\Http\Resources\PersonaCargoResource;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\Interfaces\PersonaCargoServiceInterface;
 
@@ -17,37 +18,25 @@ class PersonaCargoController extends Controller
     public function index(): JsonResponse
     {
         $personaCargos = $this->personaCargoService->getAllPaginated();
-        return response()->json($personaCargos);
+        return PersonaCargoResource::collection($personaCargos)->response();
     }
 
     public function show(PersonaCargo $personaCargo): JsonResponse
     {
         $personaCargoResuelto = $this->personaCargoService->getById($personaCargo);
-        return response()->json($personaCargoResuelto);
-    }
-
-    public function create(): JsonResponse
-    {
-        $options = $this->personaCargoService->getSelectOptions();
-        return response()->json($options);
+        return response()->json(PersonaCargoResource::make($personaCargoResuelto));
     }
 
     public function store(StorePersonaCargoRequest $request): JsonResponse
     {
         $personaCargo = $this->personaCargoService->create($request->validated());
-        return response()->json($personaCargo, 201);
-    }
-
-    public function edit(PersonaCargo $personaCargo): JsonResponse
-    {
-        $options = $this->personaCargoService->getSelectOptions();
-        return response()->json(['personaCargo' => $personaCargo] + $options);
+        return response()->json(PersonaCargoResource::make($personaCargo), 201);
     }
 
     public function update(UpdatePersonaCargoRequest $request, PersonaCargo $personaCargo): JsonResponse
     {
         $personaCargoActualizada = $this->personaCargoService->update($personaCargo, $request->validated());
-        return response()->json($personaCargoActualizada);
+        return response()->json(PersonaCargoResource::make($personaCargoActualizada));
     }
 
     public function destroy(PersonaCargo $personaCargo): JsonResponse

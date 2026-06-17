@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PlanillaState;
+use App\Http\Resources\PlanillaStateResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class PlanillaStateController extends Controller
     {
         $states = PlanillaState::where('user_id', $request->user()->id)->get();
 
-        return response()->json($states);
+        return PlanillaStateResource::collection($states)->response();
     }
 
     public function store(Request $request): JsonResponse
@@ -29,6 +30,6 @@ class PlanillaStateController extends Controller
             ['estado' => $data['estado']]
         );
 
-        return response()->json($state, 201);
+        return response()->json(PlanillaStateResource::make($state), 201);
     }
 }

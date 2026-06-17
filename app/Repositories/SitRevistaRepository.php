@@ -10,7 +10,7 @@ class SitRevistaRepository implements SitRevistaRepositoryInterface
 {
     public function getAllPaginated(int $perPage = 15): LengthAwarePaginator
     {
-        return SitRevista::paginate($perPage);
+        return SitRevista::with('personaCargos')->paginate($perPage);
     }
 
     public function getById(SitRevista $sitRevista): SitRevista

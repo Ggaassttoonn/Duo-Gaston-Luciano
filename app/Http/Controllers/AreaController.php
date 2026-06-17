@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Contracts\Interfaces\AreaServiceInterface;
 use App\Http\Requests\Area\StoreAreaRequest;
 use App\Http\Requests\Area\UpdateAreaRequest;
+use App\Http\Resources\AreaResource;
 use App\Models\Area;
 use Illuminate\Http\JsonResponse;
 
@@ -18,7 +19,7 @@ class AreaController extends Controller
     {
         $areas = $this->areaService->getAllPaginated();
 
-        return response()->json($areas);
+        return AreaResource::collection($areas)->response();
     }
 
     public function show(
@@ -27,12 +28,7 @@ class AreaController extends Controller
         $areaResuelta = $this->areaService
             ->getById($area);
 
-        return response()->json($areaResuelta);
-    }
-
-    public function create(): JsonResponse
-    {
-        return response()->json([]);
+        return response()->json(AreaResource::make($areaResuelta));
     }
 
     public function store(
@@ -41,13 +37,7 @@ class AreaController extends Controller
         $area = $this->areaService
             ->create($request->validated());
 
-        return response()->json($area, 201);
-    }
-
-    public function edit(
-        Area $area
-    ): JsonResponse {
-        return response()->json($area);
+        return response()->json(AreaResource::make($area), 201);
     }
 
     public function update(
@@ -57,7 +47,7 @@ class AreaController extends Controller
         $areaActualizada = $this->areaService
             ->update($area, $request->validated());
 
-        return response()->json($areaActualizada);
+        return response()->json(AreaResource::make($areaActualizada));
     }
 
     public function destroy(

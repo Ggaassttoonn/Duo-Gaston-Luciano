@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SentReport;
+use App\Http\Resources\SentReportResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class SentReportController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json($reports);
+        return SentReportResource::collection($reports)->response();
     }
 
     public function store(Request $request): JsonResponse
@@ -34,6 +35,6 @@ class SentReportController extends Controller
 
         $report->load('docente', 'planilla');
 
-        return response()->json($report, 201);
+        return response()->json(SentReportResource::make($report), 201);
     }
 }
