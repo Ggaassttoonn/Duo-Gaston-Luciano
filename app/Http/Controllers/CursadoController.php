@@ -3,19 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cursado;
-use App\Services\CursadoService;
 use App\Http\Requests\Cursado\StoreCursadoRequest;
 use App\Http\Requests\Cursado\UpdateCursadoRequest;
 use App\Http\Resources\CursadoResource;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\Interfaces\CursadoServiceInterface;
 
-
-
 class CursadoController extends Controller
 {
-    // Usamos inyección de dependencias en el constructor
-    public function __construct(private CursadoService $cursadoService)
+    public function __construct(private CursadoServiceInterface $cursadoService)
     {
     }
 

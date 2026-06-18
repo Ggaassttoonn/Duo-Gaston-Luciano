@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Contracts\Interfaces\AuthServiceInterface;
 use App\Models\Persona;
 use App\Models\Users;
-use App\Models\UserPreference;
+use App\Http\Resources\UsersResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -25,25 +25,12 @@ class AuthService implements AuthServiceInterface
 
         $token = $user->createToken('auth-token')->plainTextToken;
 
-        $user->load('persona');
-
-        $preferences = UserPreference::where('user_id', $user->id)
-            ->pluck('value', 'key')
-            ->toArray();
+        $user->load('persona', 'preferences');
 
         return [
-            'user' => [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'email' => $user->email,
-                'role'  => $user->role,
-                'foto'  => $user->foto,
-            ],
-            'token'      => $token,
-            'role'       => $user->role,
-            'foto'       => $user->foto,
-            'persona_id' => $user->persona_id,
-            'preferences' => $preferences,
+            'user' => UsersResource::make($user)->resolve(),
+            'token' => $token,
+            'preferences' => $user->preferences->pluck('value', 'key')->toArray(),
         ];
     }
 
@@ -54,7 +41,7 @@ class AuthService implements AuthServiceInterface
         $apellidos = $parts[1] ?? $nombres;
 
         $persona = Persona::firstOrCreate(
-            ['e-mail' => $data['email']],
+            ['email' => $data['email']],
             [
                 'apellidos'        => $apellidos,
                 'nombres'          => $nombres,
@@ -75,18 +62,11 @@ class AuthService implements AuthServiceInterface
 
         $token = $user->createToken('auth-token')->plainTextToken;
 
+        $user->load('persona');
+
         return [
-            'user' => [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'email' => $user->email,
-                'role'  => $user->role,
-                'foto'  => null,
-            ],
-            'token'      => $token,
-            'role'       => $user->role,
-            'foto'       => null,
-            'persona_id' => $user->persona_id,
+            'user' => UsersResource::make($user)->resolve(),
+            'token' => $token,
         ];
     }
 
@@ -98,24 +78,11 @@ class AuthService implements AuthServiceInterface
             throw ValidationException::withMessages(['message' => ['No autenticado.']]);
         }
 
-        $user->load('persona');
-
-        $preferences = UserPreference::where('user_id', $user->id)
-            ->pluck('value', 'key')
-            ->toArray();
+        $user->load('persona', 'preferences');
 
         return [
-            'user' => [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'email' => $user->email,
-                'role'  => $user->role,
-                'foto'  => $user->foto,
-            ],
-            'role'       => $user->role,
-            'foto'       => $user->foto,
-            'persona_id' => $user->persona_id,
-            'preferences' => $preferences,
+            'user' => UsersResource::make($user)->resolve(),
+            'preferences' => $user->preferences->pluck('value', 'key')->toArray(),
         ];
     }
 
@@ -141,15 +108,7 @@ class AuthService implements AuthServiceInterface
 
         return [
             'message' => 'Perfil actualizado correctamente.',
-            'user'    => [
-                'id'    => $user->id,
-                'name'  => $user->name,
-                'email' => $user->email,
-                'role'  => $user->role,
-                'foto'  => $user->foto,
-            ],
-            'role'    => $user->role,
-            'foto'    => $user->foto,
+            'user' => UsersResource::make($user)->resolve(),
         ];
     }
 
@@ -162,17 +121,15 @@ class AuthService implements AuthServiceInterface
         }
 
         foreach ($preferences as $key => $value) {
-            UserPreference::updateOrCreate(
-                ['user_id' => $user->id, 'key' => $key],
+            $user->preferences()->updateOrCreate(
+                ['key' => $key],
                 ['value' => $value]
             );
         }
 
-        $all = UserPreference::where('user_id', $user->id)
-            ->pluck('value', 'key')
-            ->toArray();
+        $user->load('preferences');
 
-        return ['preferences' => $all];
+        return ['preferences' => $user->preferences->pluck('value', 'key')->toArray()];
     }
 
     public function getPreferences(): array
@@ -183,11 +140,9 @@ class AuthService implements AuthServiceInterface
             throw ValidationException::withMessages(['message' => ['No autenticado.']]);
         }
 
-        $preferences = UserPreference::where('user_id', $user->id)
-            ->pluck('value', 'key')
-            ->toArray();
+        $user->load('preferences');
 
-        return ['preferences' => $preferences];
+        return ['preferences' => $user->preferences->pluck('value', 'key')->toArray()];
     }
 
     private function saveFoto(string $dataUrl): string
@@ -216,7 +171,21 @@ class AuthService implements AuthServiceInterface
 
         $filename = 'fotos/' . uniqid() . '.' . $extension;
 
+        if (!is_dir(storage_path('app/public/fotos'))) {
+            Storage::disk('public')->makeDirectory('fotos');
+        }
+
         Storage::disk('public')->put($filename, $imageData);
+
+        $publicPath = public_path('storage');
+
+        if (!file_exists($publicPath)) {
+            try {
+                app('files')->link(storage_path('app/public'), $publicPath);
+            } catch (\Exception $e) {
+                return Storage::disk('public')->url($filename);
+            }
+        }
 
         return Storage::disk('public')->url($filename);
     }

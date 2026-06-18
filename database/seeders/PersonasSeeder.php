@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use database\Console\Seeds\WithoutModelEvents;
+use Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,32 +16,32 @@ class PersonasSeeder extends Seeder
                 'apellidos' => 'García',
                 'nombres' => 'Juan',
                 'dni' => '12345678',
-                'e-mail' => 'juangarcia@example.com'
+                'email' => 'juangarcia@example.com'
             ],
             [
                 'apellidos' => "Azula",
                 'nombres' => 'Gastón',
                 'dni' => '11111111',
-                'e-mail' => 'gastónaluzla@example.com'
+                'email' => 'gastónaluzla@example.com'
             ],
             [
                 'apellidos' => 'Juanes',
                 'nombres' => 'Margarita',
                 'dni' => '22222222',
-                'e-mail' => 'margarita@example.com'
+                'email' => 'margarita@example.com'
             ],
             [
                 'apellidos' => 'Monzón',
                 'nombres' => 'Luis Miguel',
                 'dni' => '33333333',
-                'e-mail' => 'Luismi@example.com'
+                'email' => 'Luismi@example.com'
 
             ],
             [
                 'apellidos' => 'Gonalez',
                 'nombres' => 'Amanda',
-                'dni' => '22222222',
-                'e-mail' => 'Amagonzalez@gmail.com'
+                'dni' => '44444444',
+                'email' => 'Amagonzalez@gmail.com'
             ]
         ]);
     }
