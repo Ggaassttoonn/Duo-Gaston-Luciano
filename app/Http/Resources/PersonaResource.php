@@ -13,7 +13,7 @@ class PersonaResource extends BaseResource
             'apellidos' => $this->apellidos,
             'nombres' => $this->nombres,
             'dni' => $this->dni,
-            'e-mail' => $this->{'e-mail'},
+            'email' => $this->email,
             'telefono' => $this->telefono,
             'direccion' => $this->direccion,
             'fecha_nacimiento' => $this->fecha_nacimiento?->format('Y-m-d'),

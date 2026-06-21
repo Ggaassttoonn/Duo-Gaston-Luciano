@@ -26,7 +26,7 @@ class UpdatePersonaRequest extends FormRequest
             'apellidos'        => 'sometimes|required|string|max:255',
             'nombres'          => 'sometimes|required|string|max:255',
             'dni'              => 'sometimes|required|integer|unique:personas,dni,' . $personaId,
-            'e-mail'           => 'sometimes|required|email|max:255|unique:personas,e-mail,' . $personaId,
+            'email'           => 'sometimes|required|email|max:255|unique:personas,email,' . $personaId,
             'telefono'         => 'nullable|string|max:50',
             'direccion'        => 'nullable|string|max:255',
             'fecha_nacimiento' => 'nullable|date|before:today',
@@ -40,7 +40,7 @@ class UpdatePersonaRequest extends FormRequest
     {
         return [
             'dni.unique'    => 'El DNI ingresado ya pertenece a otra persona.',
-            'e-mail.unique' => 'El correo electrónico ya pertenece a otra persona.',
+            'email.unique' => 'El correo electrónico ya pertenece a otra persona.',
         ];
     }
 }

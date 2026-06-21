@@ -21,7 +21,7 @@ class PersonaApiTest extends TestCase
             'apellidos'        => 'Admin',
             'nombres'          => 'User',
             'dni'              => '87654321',
-            'e-mail'           => 'admin@example.com',
+            'email'           => 'admin@example.com',
             'telefono'         => '',
             'direccion'        => '',
             'fecha_nacimiento' => '2000-01-01',
@@ -44,7 +44,7 @@ class PersonaApiTest extends TestCase
             'apellidos'        => 'García',
             'nombres'          => 'Juan',
             'dni'              => '11111111',
-            'e-mail'           => 'juan@example.com',
+            'email'           => 'juan@example.com',
             'telefono'         => '123456789',
             'direccion'        => 'Calle 1',
             'fecha_nacimiento' => '1990-05-15',
@@ -54,7 +54,7 @@ class PersonaApiTest extends TestCase
             'apellidos'        => 'Pérez',
             'nombres'          => 'María',
             'dni'              => '22222222',
-            'e-mail'           => 'maria@example.com',
+            'email'           => 'maria@example.com',
             'telefono'         => '987654321',
             'direccion'        => 'Calle 2',
             'fecha_nacimiento' => '1985-10-20',
@@ -74,14 +74,14 @@ class PersonaApiTest extends TestCase
             'apellidos'        => 'López',
             'nombres'          => 'Carlos',
             'dni'              => 33333333,
-            'e-mail'           => 'carlos@example.com',
+            'email'           => 'carlos@example.com',
             'telefono'         => '555555555',
             'direccion'        => 'Av. Siempre Viva 123',
             'fecha_nacimiento' => '1995-03-10',
         ]);
 
         $response->assertStatus(201)
-            ->assertJsonStructure(['id', 'apellidos', 'nombres', 'dni', 'e-mail'])
+            ->assertJsonStructure(['id', 'apellidos', 'nombres', 'dni', 'email'])
             ->assertJsonPath('apellidos', 'López')
             ->assertJsonPath('nombres', 'Carlos');
 
@@ -96,7 +96,7 @@ class PersonaApiTest extends TestCase
             'apellidos'        => 'Martínez',
             'nombres'          => 'Ana',
             'dni'              => '44444444',
-            'e-mail'           => 'ana@example.com',
+            'email'           => 'ana@example.com',
             'telefono'         => '111111111',
             'direccion'        => 'Calle 10',
             'fecha_nacimiento' => '1988-07-22',
@@ -117,7 +117,7 @@ class PersonaApiTest extends TestCase
             'apellidos'        => 'Fernández',
             'nombres'          => 'Pedro',
             'dni'              => '55555555',
-            'e-mail'           => 'pedro@example.com',
+            'email'           => 'pedro@example.com',
             'telefono'         => '222222222',
             'direccion'        => 'Calle 20',
             'fecha_nacimiento' => '1992-11-30',
@@ -140,7 +140,7 @@ class PersonaApiTest extends TestCase
             'apellidos'        => 'Gómez',
             'nombres'          => 'Laura',
             'dni'              => '66666666',
-            'e-mail'           => 'laura@example.com',
+            'email'           => 'laura@example.com',
             'telefono'         => '333333333',
             'direccion'        => 'Calle 30',
             'fecha_nacimiento' => '1998-09-05',
@@ -160,11 +160,11 @@ class PersonaApiTest extends TestCase
             'apellidos' => '',
             'nombres'   => '',
             'dni'       => '',
-            'e-mail'    => 'not-an-email',
+            'email'    => 'not-an-email',
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['apellidos', 'nombres', 'dni', 'e-mail']);
+            ->assertJsonValidationErrors(['apellidos', 'nombres', 'dni', 'email']);
     }
 
     public function test_create_persona_duplicate_dni_fails(): void
@@ -175,7 +175,7 @@ class PersonaApiTest extends TestCase
             'apellidos'        => 'Original',
             'nombres'          => 'User',
             'dni'              => '77777777',
-            'e-mail'           => 'original@example.com',
+            'email'           => 'original@example.com',
             'telefono'         => '',
             'direccion'        => '',
             'fecha_nacimiento' => '2000-01-01',
@@ -185,7 +185,7 @@ class PersonaApiTest extends TestCase
             'apellidos'        => 'Duplicado',
             'nombres'          => 'User',
             'dni'              => '77777777',
-            'e-mail'           => 'otro@example.com',
+            'email'           => 'otro@example.com',
             'telefono'         => '',
             'direccion'        => '',
             'fecha_nacimiento' => '2000-01-01',

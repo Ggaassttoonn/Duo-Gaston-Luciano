@@ -63,9 +63,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/planillas', [PlanillaController::class, 'index'])->name('planillas.index');
     Route::post('/planillas', [PlanillaController::class, 'store'])->name('planillas.store');
-    Route::put('/planillas/{id}', [PlanillaController::class, 'update'])->name('planillas.update');
+    Route::put('/planillas/{planilla}', [PlanillaController::class, 'update'])->name('planillas.update');
     Route::get('/planillas-recibidas', [PlanillaController::class, 'recibidas'])->name('planillas.recibidas');
-    Route::put('/planillas/{id}/revision', [PlanillaController::class, 'revision'])->name('planillas.revision');
+    Route::put('/planillas/{planilla}/revision', [PlanillaController::class, 'revision'])->name('planillas.revision');
 
     Route::apiResource('areas', AreaController::class);
     Route::apiResource('cargos', CargoController::class);

@@ -7,6 +7,7 @@ use App\Http\Requests\Planilla\StorePlanillaRequest;
 use App\Http\Requests\Planilla\StoreRevisionRequest;
 use App\Http\Requests\Planilla\UpdatePlanillaRequest;
 use App\Http\Resources\PlanillaResource;
+use App\Models\Planilla;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -36,9 +37,9 @@ class PlanillaController extends Controller
         return response()->json(PlanillaResource::make($planilla), 201);
     }
 
-    public function update(UpdatePlanillaRequest $request, int $id): JsonResponse
+    public function update(UpdatePlanillaRequest $request, Planilla $planilla): JsonResponse
     {
-        $planilla = $this->planillaService->update($id, $request->validated());
+        $planilla = $this->planillaService->update($planilla->id, $request->validated());
 
         return response()->json(PlanillaResource::make($planilla));
     }
@@ -52,11 +53,11 @@ class PlanillaController extends Controller
         return PlanillaResource::collection($planillas)->response();
     }
 
-    public function revision(StoreRevisionRequest $request, int $id): JsonResponse
+    public function revision(StoreRevisionRequest $request, Planilla $planilla): JsonResponse
     {
         $user = $request->user();
 
-        $planilla = $this->planillaService->revisar($id, $request->validated(), $user->id);
+        $planilla = $this->planillaService->revisar($planilla->id, $request->validated(), $user->id);
 
         return response()->json(PlanillaResource::make($planilla));
     }

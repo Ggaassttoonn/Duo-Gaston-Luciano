@@ -20,7 +20,7 @@ class PersonaCargoCursadoSeeder extends Seeder
 
         $cargoMaestro = Cargo::where('cargo', 'Maestro/a')->first();
 
-        $designacionesMaestros = PersonaCargo::where('cargos-id', $cargoMaestro->id)->get();
+        $designacionesMaestros = PersonaCargo::where('cargos_id', $cargoMaestro->id)->get();
 
         if ($cursados->isEmpty() || $designacionesMaestros->isEmpty()) {
             return;

@@ -22,7 +22,7 @@ class AreaApiTest extends TestCase
             'apellidos'        => 'Admin',
             'nombres'          => 'User',
             'dni'              => '87654321',
-            'e-mail'           => 'admin@example.com',
+            'email'           => 'admin@example.com',
             'telefono'         => '',
             'direccion'        => '',
             'fecha_nacimiento' => '2000-01-01',

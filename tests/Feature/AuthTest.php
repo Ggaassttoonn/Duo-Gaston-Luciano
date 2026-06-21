@@ -17,7 +17,7 @@ class AuthTest extends TestCase
             'apellidos'        => $overrides['apellidos'] ?? 'Test',
             'nombres'          => $overrides['nombres'] ?? 'User',
             'dni'              => $overrides['dni'] ?? '12345678',
-            'e-mail'           => $overrides['email'] ?? 'test@example.com',
+            'email'           => $overrides['email'] ?? 'test@example.com',
             'telefono'         => $overrides['telefono'] ?? '',
             'direccion'        => $overrides['direccion'] ?? '',
             'fecha_nacimiento' => $overrides['fecha_nacimiento'] ?? '2000-01-01',
@@ -43,11 +43,8 @@ class AuthTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'user' => ['id', 'name', 'email', 'role', 'foto'],
+                'user' => ['id', 'name', 'email', 'role', 'foto', 'persona_id', 'persona'],
                 'token',
-                'role',
-                'foto',
-                'persona_id',
             ]);
 
         $this->assertDatabaseHas('users', [
@@ -69,11 +66,8 @@ class AuthTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'user' => ['id', 'name', 'email', 'role', 'foto'],
+                'user' => ['id', 'name', 'email', 'role', 'foto', 'persona_id', 'persona'],
                 'token',
-                'role',
-                'foto',
-                'persona_id',
                 'preferences',
             ]);
     }
@@ -102,10 +96,7 @@ class AuthTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJsonStructure([
-                'user' => ['id', 'name', 'email', 'role', 'foto'],
-                'role',
-                'foto',
-                'persona_id',
+                'user' => ['id', 'name', 'email', 'role', 'foto', 'persona_id', 'persona'],
                 'preferences',
             ])
             ->assertJsonPath('user.email', $user->email);
@@ -130,9 +121,7 @@ class AuthTest extends TestCase
             ->assertJsonPath('user.name', 'Nombre Actualizado')
             ->assertJsonStructure([
                 'message',
-                'user' => ['id', 'name', 'email', 'role', 'foto'],
-                'role',
-                'foto',
+                'user' => ['id', 'name', 'email', 'role', 'foto', 'persona_id', 'persona'],
             ]);
     }
 
