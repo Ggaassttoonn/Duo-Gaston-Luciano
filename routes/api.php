@@ -21,6 +21,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PlanillaRevisionController;
 use App\Http\Controllers\PlanillaStateController;
 use App\Http\Controllers\SentReportController;
+use App\Http\Controllers\EventoCalendarioController;
 
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
@@ -93,4 +94,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/sent-reports', [SentReportController::class, 'index']);
     Route::post('/sent-reports', [SentReportController::class, 'store']);
+
+    Route::get('/eventos-calendario', [EventoCalendarioController::class, 'index']);
+    Route::post('/eventos-calendario', [EventoCalendarioController::class, 'store']);
+    Route::put('/eventos-calendario/{eventoCalendario}', [EventoCalendarioController::class, 'update']);
+    Route::delete('/eventos-calendario/{eventoCalendario}', [EventoCalendarioController::class, 'destroy']);
+
+
+
+
 });
