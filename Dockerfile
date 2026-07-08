@@ -32,5 +32,6 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/start.sh /start.sh
 RUN chmod +x /start.sh
 
-EXPOSE 80
+# Port is assigned by Railway via $PORT at runtime; 8080 is the fallback default
+EXPOSE 8080
 CMD ["/start.sh"]
