@@ -4,13 +4,10 @@ set -e
 NGINX_PORT=${PORT:-8080}
 echo "Using nginx port: $NGINX_PORT"
 
-# Asegurar directorios
 mkdir -p /etc/nginx/http.d /run/php
 
-# Limpiar config conflictiva
 rm -f /etc/nginx/conf.d/default.conf
 
-# Configurar php-fpm para loguear errores a stderr
 cat > /usr/local/etc/php-fpm.d/zz-docker.conf <<'EOFPHP'
 [global]
 daemonize = no
@@ -23,7 +20,6 @@ access.log = /dev/stderr
 catch_workers_output = yes
 EOFPHP
 
-# Generar nginx config
 cat > /etc/nginx/http.d/default.conf <<EOF
 error_log /dev/stderr warn;
 
@@ -62,66 +58,8 @@ server {
 }
 EOF
 
-# Verificar config de nginx
 nginx -t 2>&1
 
 php artisan migrate --force 2>/dev/null || true
 
-supervisord -c /etc/supervisord.conf &
-SUPERVISORD_PID=$!
-
-sleep 3
-
-echo "=== LISTENING PORTS ==="
-ss -tlnp 2>/dev/null || echo "(ss not found)"
-echo "======================="
-
-echo "=== IP ADDRESSES ==="
-hostname -i 2>/dev/null && echo "---" || echo "(hostname not found)"
-ip addr show 2>/dev/null | grep "inet " || echo "(ip not found)"
-echo "===================="
-
-echo "=== TESTING FPM CONNECTION ==="
-php -r '
-foreach(["127.0.0.1:9000","localhost:9000"] as $t){
-    list($h,$p)=explode(":",$t);
-    $c=@fsockopen($h,(int)$p,$e,$s,2);
-    echo "$t => ".($c?"OK (fd $c)":"FAIL errno=$e: $s").PHP_EOL;
-    if($c)fclose($c);
-}
-' 2>&1 || echo "(php test failed)"
-echo "=============================="
-
-echo "=== TESTING NGINX /api/health ==="
-wget -S -O - http://127.0.0.1:8080/api/health 2>&1 || echo "(wget exit code: $?)"
-echo ""
-echo "=================================="
-
-echo "=== TESTING NGINX / (PHP) ==="
-wget -S -O - http://127.0.0.1:8080/ 2>&1 || echo "(wget exit code: $?)"
-echo ""
-echo "=============================="
-
-echo "=== RAILWAY ENV ==="
-env | grep -i railway 2>/dev/null || echo "(no railway env vars)"
-echo "===================="
-
-echo "=== ALL ENV ==="
-env | sort 2>/dev/null || echo "(env not found)"
-echo "================"
-
-echo "=== TEST RAILWAY PUBLIC URL ==="
-wget -S -O - --timeout=10 "http://${RAILWAY_PUBLIC_DOMAIN}:80/api/health" 2>&1 || echo "(public url failed: $?)"
-echo ""
-echo "=== TEST RAILWAY PRIVATE DOMAIN ==="
-wget -S -O - --timeout=5 "http://${RAILWAY_PRIVATE_DOMAIN}:8080/api/health" 2>&1 || echo "(private domain failed: $?)"
-echo ""
-echo "=============================="
-
-echo "=== WAITING FOR SUPERVISORD ==="
-date
-wait $SUPERVISORD_PID || true
-echo "=== SUPERVISORD EXITED (PID=$SUPERVISORD_PID) ==="
-date
-echo "=== Container would normally exit here ==="
-tail -f /dev/null
+exec supervisord -c /etc/supervisord.conf -n
