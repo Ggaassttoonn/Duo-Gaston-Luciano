@@ -2,6 +2,7 @@
 set -e
 
 PORT=${PORT:-80}
+echo "Using PORT: $PORT"
 
 # Asegurar que el directorio de config existe
 mkdir -p /etc/nginx/http.d
