@@ -1,7 +1,8 @@
 #!/bin/sh
 set -e
 
-PORT=${PORT:-80}
+# Railway envia trafico al puerto 9000
+PORT=9000
 echo "Using PORT: $PORT"
 
 # Asegurar que el directorio de config existe
