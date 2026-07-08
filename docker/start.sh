@@ -1,22 +1,27 @@
 #!/bin/sh
 set -e
 
-# Railway envia trafico al puerto 9000
 NGINX_PORT=9000
-FPM_PORT=9001
-echo "Using nginx port: $NGINX_PORT, php-fpm port: $FPM_PORT"
+FPM_SOCK="/var/run/php-fpm.sock"
+echo "Using nginx port: $NGINX_PORT, php-fpm socket: $FPM_SOCK"
 
-# Cambiar php-fpm a un puerto distinto para no chocar con nginx
-sed -i "s/listen = 9000/listen = $FPM_PORT/g" /usr/local/etc/php-fpm.d/www.conf
-sed -i "s/listen = 9000/listen = $FPM_PORT/g" /usr/local/etc/php-fpm.d/zz-docker.conf 2>/dev/null || true
+# Configurar php-fpm para usar socket Unix
+grep '^listen' /usr/local/etc/php-fpm.d/www.conf || echo "no listen found in www.conf"
+grep '^listen' /usr/local/etc/php-fpm.d/zz-docker.conf 2>/dev/null || echo "no zz-docker.conf"
+sed -i "s|^listen\s*=.*|listen = $FPM_SOCK|" /usr/local/etc/php-fpm.d/www.conf 2>/dev/null || true
+sed -i "s|^listen\s*=.*|listen = $FPM_SOCK|" /usr/local/etc/php-fpm.d/zz-docker.conf 2>/dev/null || true
+echo "listen.owner = www-data" >> /usr/local/etc/php-fpm.d/www.conf
+echo "listen.group = www-data" >> /usr/local/etc/php-fpm.d/www.conf
+echo "listen.mode = 0660" >> /usr/local/etc/php-fpm.d/www.conf
+grep '^listen' /usr/local/etc/php-fpm.d/www.conf
 
-# Asegurar que el directorio de config existe
-mkdir -p /etc/nginx/http.d
+# Asegurar directorios
+mkdir -p /etc/nginx/http.d /run/php
 
-# Eliminar config vieja de conf.d (Alpine no la usa y causa conflicto)
+# Limpiar config conflictiva
 rm -f /etc/nginx/conf.d/default.conf
 
-# Generar nginx config con el puerto correcto
+# Generar nginx config con socket Unix
 cat > /etc/nginx/http.d/default.conf <<EOF
 server {
     listen $NGINX_PORT;
@@ -35,7 +40,7 @@ server {
     location = /robots.txt  { access_log off; log_not_found off; }
 
     location ~ \.php\$ {
-        fastcgi_pass 127.0.0.1:$FPM_PORT;
+        fastcgi_pass unix:$FPM_SOCK;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param APP_ENV production;
         include fastcgi_params;
