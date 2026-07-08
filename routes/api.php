@@ -28,6 +28,8 @@ use App\Http\Controllers\SentReportController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\EventoCalendarioController;
 
+Route::get('/health', fn() => response()->json(['status' => 'ok', 'app' => 'BackPlanificar']))->name('health');
+
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
 
