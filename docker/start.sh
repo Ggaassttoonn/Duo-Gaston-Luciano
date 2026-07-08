@@ -4,7 +4,10 @@ set -e
 PORT=${PORT:-80}
 
 # Asegurar que el directorio de config existe
-mkdir -p /etc/nginx/http.d /etc/nginx/conf.d
+mkdir -p /etc/nginx/http.d
+
+# Eliminar config vieja de conf.d (Alpine no la usa y causa conflicto)
+rm -f /etc/nginx/conf.d/default.conf
 
 # Generar nginx config con el puerto correcto
 cat > /etc/nginx/http.d/default.conf <<EOF
