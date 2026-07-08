@@ -28,8 +28,7 @@ cat > /etc/nginx/http.d/default.conf <<EOF
 error_log /dev/stderr warn;
 
 server {
-    listen $NGINX_PORT;
-    listen [::]:$NGINX_PORT;
+    listen [::]:$NGINX_PORT ipv6only=off;
     server_name _;
     root /app/public;
     index index.php;
