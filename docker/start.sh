@@ -98,6 +98,14 @@ wget -S -O - http://127.0.0.1:8080/ 2>&1 || echo "(wget exit code: $?)"
 echo ""
 echo "=============================="
 
+echo "=== RAILWAY ENV ==="
+env | grep -i railway 2>/dev/null || echo "(no railway env vars)"
+echo "===================="
+
+echo "=== ALL ENV ==="
+env | sort 2>/dev/null || echo "(env not found)"
+echo "================"
+
 echo "=== WAITING FOR SUPERVISORD ==="
 date
 wait $SUPERVISORD_PID || true
