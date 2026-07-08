@@ -6,14 +6,16 @@ FPM_SOCK="/var/run/php-fpm.sock"
 echo "Using nginx port: $NGINX_PORT, php-fpm socket: $FPM_SOCK"
 
 # Configurar php-fpm para usar socket Unix
-grep '^listen' /usr/local/etc/php-fpm.d/www.conf || echo "no listen found in www.conf"
-grep '^listen' /usr/local/etc/php-fpm.d/zz-docker.conf 2>/dev/null || echo "no zz-docker.conf"
-sed -i "s|^listen\s*=.*|listen = $FPM_SOCK|" /usr/local/etc/php-fpm.d/www.conf 2>/dev/null || true
-sed -i "s|^listen\s*=.*|listen = $FPM_SOCK|" /usr/local/etc/php-fpm.d/zz-docker.conf 2>/dev/null || true
-echo "listen.owner = www-data" >> /usr/local/etc/php-fpm.d/www.conf
-echo "listen.group = www-data" >> /usr/local/etc/php-fpm.d/www.conf
-echo "listen.mode = 0660" >> /usr/local/etc/php-fpm.d/www.conf
-grep '^listen' /usr/local/etc/php-fpm.d/www.conf
+cat > /usr/local/etc/php-fpm.d/zz-docker.conf <<EOFPHP
+[global]
+daemonize = no
+
+[www]
+listen = $FPM_SOCK
+listen.owner = www-data
+listen.group = www-data
+listen.mode = 0660
+EOFPHP
 
 # Asegurar directorios
 mkdir -p /etc/nginx/http.d /run/php
