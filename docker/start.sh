@@ -2,31 +2,25 @@
 set -e
 
 NGINX_PORT=${PORT:-8080}
-FPM_SOCK="/var/run/php-fpm.sock"
-echo "Using nginx port: $NGINX_PORT, php-fpm socket: $FPM_SOCK"
+FPM_PORT=9000
+echo "Using nginx port: $NGINX_PORT, php-fpm port: $FPM_PORT"
 
-# Configurar php-fpm para usar socket Unix
+# Configurar php-fpm para usar TCP en localhost
 cat > /usr/local/etc/php-fpm.d/zz-docker.conf <<EOFPHP
 [global]
 daemonize = no
 
 [www]
-listen = $FPM_SOCK
-listen.owner = www-data
-listen.group = www-data
-listen.mode = 0660
+listen = 127.0.0.1:$FPM_PORT
 EOFPHP
 
 # Asegurar directorios
-mkdir -p /etc/nginx/http.d /run/php
+mkdir -p /etc/nginx/http.d
 
 # Limpiar config conflictiva
 rm -f /etc/nginx/conf.d/default.conf
 
-# Corregir usuario de nginx para que pueda leer el socket de php-fpm
-sed -i 's/^user nginx;/user www-data;/' /etc/nginx/nginx.conf
-
-# Generar nginx config con socket Unix
+# Generar nginx config con TCP
 cat > /etc/nginx/http.d/default.conf <<EOF
 server {
     listen $NGINX_PORT;
@@ -45,7 +39,7 @@ server {
     location = /robots.txt  { access_log off; log_not_found off; }
 
     location ~ \.php\$ {
-        fastcgi_pass unix:$FPM_SOCK;
+        fastcgi_pass 127.0.0.1:$FPM_PORT;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param APP_ENV production;
         include fastcgi_params;
