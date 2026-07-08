@@ -76,4 +76,20 @@ echo "=== LISTENING PORTS ==="
 ss -tlnp 2>/dev/null || echo "(ss not found)"
 echo "======================="
 
+echo "=== TESTING FPM CONNECTION ==="
+php -r '
+foreach(["127.0.0.1:9000","localhost:9000"] as $t){
+    list($h,$p)=explode(":",$t);
+    $c=@fsockopen($h,(int)$p,$e,$s,2);
+    echo "$t => ".($c?"OK (fd $c)":"FAIL errno=$e: $s").PHP_EOL;
+    if($c)fclose($c);
+}
+' 2>&1 || echo "(php test failed)"
+echo "=============================="
+
+echo "=== TESTING NGINX (localhost:8080) ==="
+wget -q -O - http://127.0.0.1:8080/api/health 2>&1 || curl -sf http://127.0.0.1:8080/api/health 2>&1 || echo "(wget/curl not found)"
+echo ""
+echo "======================================"
+
 wait $SUPERVISORD_PID || true
