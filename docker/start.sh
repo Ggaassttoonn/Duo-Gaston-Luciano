@@ -51,9 +51,9 @@ server {
 
     location ~ \.php\$ {
         fastcgi_pass 127.0.0.1:9000;
+        include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param APP_ENV production;
-        include fastcgi_params;
     }
 
     location ~ /\.(?!well-known).* {
@@ -88,8 +88,8 @@ foreach(["127.0.0.1:9000","localhost:9000"] as $t){
 echo "=============================="
 
 echo "=== TESTING NGINX ==="
-wget -q -O - http://127.0.0.1:8080/api/health 2>&1 || true
+wget -S -O - http://127.0.0.1:8080/api/health 2>&1 || echo "(wget exit code: $?)"
 echo ""
-echo "======================"
+echo "========"
 
 wait $SUPERVISORD_PID || true
