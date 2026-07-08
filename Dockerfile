@@ -29,14 +29,8 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction \
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
+COPY docker/start.sh /start.sh
+RUN chmod +x /start.sh
 
 EXPOSE 80
-RUN echo "#!/bin/sh" > /start.sh \
-    && echo "export PORT=\${PORT:-80}" >> /start.sh \
-    && echo "envsubst < /etc/nginx/http.d/default.conf > /tmp/nginx.conf && cp /tmp/nginx.conf /etc/nginx/http.d/default.conf" >> /start.sh \
-    && echo "envsubst < /etc/nginx/conf.d/default.conf > /tmp/nginx2.conf && cp /tmp/nginx2.conf /etc/nginx/conf.d/default.conf" >> /start.sh \
-    && echo "php artisan migrate --force 2>/dev/null" >> /start.sh \
-    && echo "supervisord -c /etc/supervisord.conf" >> /start.sh \
-    && chmod +x /start.sh
-
 CMD ["/start.sh"]
