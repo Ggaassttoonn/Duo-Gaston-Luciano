@@ -26,6 +26,7 @@ use App\Http\Controllers\PlanillaRevisionController;
 use App\Http\Controllers\PlanillaStateController;
 use App\Http\Controllers\SentReportController;
 use App\Http\Controllers\PrintController;
+use App\Http\Controllers\EventoCalendarioController;
 
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
@@ -129,4 +130,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/planificaciones-diarias/{id}/print', [PrintController::class, 'diaria'])->name('planificaciones.diarias.print');
     Route::get('/planificaciones-anuales/{id}/print', [PrintController::class, 'anual'])->name('planificaciones.anuales.print');
+
+    Route::get('/eventos-calendario', [EventoCalendarioController::class, 'index']);
+    Route::post('/eventos-calendario', [EventoCalendarioController::class, 'store']);
+    Route::put('/eventos-calendario/{eventoCalendario}', [EventoCalendarioController::class, 'update']);
+    Route::delete('/eventos-calendario/{eventoCalendario}', [EventoCalendarioController::class, 'destroy']);
 });
