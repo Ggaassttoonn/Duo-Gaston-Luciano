@@ -68,7 +68,7 @@ php artisan migrate --force 2>/dev/null || true
 
 # Mostrar puertos en escucha para diagnóstico
 echo "=== LISTENING PORTS ==="
-ss -tlnp 2>/dev/null || netstat -tlnp 2>/dev/null || echo "(no ss/netstat)"
+(ss -tlnp 2>/dev/null || netstat -tlnp 2>/dev/null || echo "(no ss/netstat)") || true
 echo "======================="
 
 exec supervisord -c /etc/supervisord.conf
