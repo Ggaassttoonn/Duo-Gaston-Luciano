@@ -20,6 +20,7 @@ log_level = notice
 [www]
 listen = 9000
 access.log = /dev/stderr
+catch_workers_output = yes
 EOFPHP
 
 # Generar nginx config
@@ -87,9 +88,14 @@ foreach(["127.0.0.1:9000","localhost:9000"] as $t){
 ' 2>&1 || echo "(php test failed)"
 echo "=============================="
 
-echo "=== TESTING NGINX ==="
+echo "=== TESTING NGINX /api/health ==="
 wget -S -O - http://127.0.0.1:8080/api/health 2>&1 || echo "(wget exit code: $?)"
 echo ""
-echo "========"
+echo "=================================="
+
+echo "=== TESTING NGINX / (PHP) ==="
+wget -S -O - http://127.0.0.1:8080/ 2>&1 || echo "(wget exit code: $?)"
+echo ""
+echo "=============================="
 
 wait $SUPERVISORD_PID || true
