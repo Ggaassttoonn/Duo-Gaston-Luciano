@@ -2,25 +2,15 @@
 set -e
 
 NGINX_PORT=${PORT:-8080}
-FPM_PORT=9000
-echo "Using nginx port: $NGINX_PORT, php-fpm port: $FPM_PORT"
-
-# Configurar php-fpm para usar TCP
-cat > /usr/local/etc/php-fpm.d/zz-docker.conf <<EOFPHP
-[global]
-daemonize = no
-
-[www]
-listen = $FPM_PORT
-EOFPHP
+echo "Using nginx port: $NGINX_PORT"
 
 # Asegurar directorios
-mkdir -p /etc/nginx/http.d
+mkdir -p /etc/nginx/http.d /run/php
 
 # Limpiar config conflictiva
 rm -f /etc/nginx/conf.d/default.conf
 
-# Generar nginx config con TCP
+# Generar nginx config
 cat > /etc/nginx/http.d/default.conf <<EOF
 server {
     listen $NGINX_PORT;
@@ -39,7 +29,7 @@ server {
     location = /robots.txt  { access_log off; log_not_found off; }
 
     location ~ \.php\$ {
-        fastcgi_pass 127.0.0.1:$FPM_PORT;
+        fastcgi_pass 127.0.0.1:9000;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         fastcgi_param APP_ENV production;
         include fastcgi_params;
