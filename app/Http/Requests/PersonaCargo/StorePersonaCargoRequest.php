@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\PersonaCargo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -21,12 +21,12 @@ class StorePersonaCargoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'personas_id' => [
+            'persona_id' => [
                 'required',
                 'integer',
                 'exists:personas,id' 
             ],
-            'cargos_id' => [
+            'cargo_id' => [
                 'required',
                 'integer',
                 'exists:cargos,id' 
@@ -34,7 +34,7 @@ class StorePersonaCargoRequest extends FormRequest
             'sit_revista_id' => [
                 'required',
                 'integer',
-                'exists:sit_revistas,id' 
+                'exists:sit_revista,id' 
             ],
         ];
     }
@@ -45,9 +45,9 @@ class StorePersonaCargoRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'personas_id.exists' => 'La persona seleccionada no es válida.',
-            'cargos_id.exists' => 'El cargo seleccionado no existe.',
-            'sit_revista_id.exists' => 'La situación de revista seleccionada no es válida.',
+            'persona_id.exists' => 'La persona seleccionada no es válida.',
+            'cargo_id.exists' => 'El cargo seleccionado no existe.',
+            'sit_revista_id.exists' => 'La situación de revista no es válida.',
         ];
     }
 }

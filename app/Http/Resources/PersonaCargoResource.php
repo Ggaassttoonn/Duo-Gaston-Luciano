@@ -10,8 +10,8 @@ class PersonaCargoResource extends BaseResource
     {
         return [
             'id' => $this->id,
-            'personas_id' => $this->personas_id,
-            'cargos_id' => $this->cargos_id,
+            'persona_id' => $this->persona_id,
+            'cargo_id' => $this->cargo_id,
             'sit_revista_id' => $this->sit_revista_id,
             'persona' => PersonaResource::make($this->whenLoaded('persona')),
             'cargo' => CargoResource::make($this->whenLoaded('cargo')),

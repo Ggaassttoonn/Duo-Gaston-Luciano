@@ -17,6 +17,8 @@ class UpdatePlanillaRequest extends FormRequest
             'titulo'    => ['sometimes', 'string', 'max:255'],
             'contenido' => ['sometimes', 'string'],
             'estado'    => ['sometimes', 'string', 'in:borrador,pendiente,revisado,aprobado,rechazado'],
+            'directores' => ['sometimes', 'array'],
+            'directores.*' => ['integer', 'exists:users,id'],
         ];
     }
 }

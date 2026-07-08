@@ -12,11 +12,11 @@ return new class extends Migration
             $table->id();
             $table->string('titulo');
             $table->longText('contenido');
-            $table->unsignedBigInteger('persona_id');
+            $table->unsignedBigInteger('user_id');
             $table->enum('estado', ['borrador', 'pendiente', 'revisado', 'aprobado', 'rechazado'])->default('borrador');
             $table->timestamps();
 
-            $table->foreign('persona_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

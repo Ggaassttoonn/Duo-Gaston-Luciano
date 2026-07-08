@@ -19,20 +19,27 @@ class PlanillaController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $personaId = $request->query('persona_id');
+        $userId = $request->query('user_id');
+        $search = $request->query('search');
 
-        if (!$personaId) {
-            return response()->json(['message' => 'persona_id es requerido.'], 400);
+        if (!$userId) {
+            return response()->json(['message' => 'user_id es requerido.'], 400);
         }
 
-        $planillas = $this->planillaService->getByPersonaId($personaId);
+        $currentUser = $request->user();
+        $directorId = $currentUser->role === 'director' ? $currentUser->id : null;
+
+        $planillas = $this->planillaService->getByUserId($userId, $search, $directorId);
 
         return PlanillaResource::collection($planillas)->response();
     }
 
     public function store(StorePlanillaRequest $request): JsonResponse
     {
-        $planilla = $this->planillaService->create($request->validated());
+        $data = $request->validated();
+        $data['user_id'] = $request->user()->id;
+
+        $planilla = $this->planillaService->create($data);
 
         return response()->json(PlanillaResource::make($planilla), 201);
     }
@@ -47,10 +54,21 @@ class PlanillaController extends Controller
     public function recibidas(Request $request): JsonResponse
     {
         $user = $request->user();
+        $search = $request->query('search');
+        $docenteId = $request->query('docente_id');
 
-        $planillas = $this->planillaService->getRecibidas($user->id);
+        $planillas = $this->planillaService->getRecibidas($user->id, $search, $docenteId);
 
         return PlanillaResource::collection($planillas)->response();
+    }
+
+    public function destroy(Request $request, Planilla $planilla): JsonResponse
+    {
+        $user = $request->user();
+
+        $this->planillaService->delete($planilla->id, $user->id);
+
+        return response()->json(['message' => 'Planilla eliminada exitosamente.']);
     }
 
     public function revision(StoreRevisionRequest $request, Planilla $planilla): JsonResponse

@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('apellidos');
             $table->string('nombres');
             $table->string('dni')->unique();
-            $table->string('e-mail')->unique();
+            $table->string('email')->unique();
             $table->string('telefono');
             $table->string('direccion');
             $table->date('fecha_nacimiento');

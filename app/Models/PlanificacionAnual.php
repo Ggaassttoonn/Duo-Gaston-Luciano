@@ -17,7 +17,7 @@ class PlanificacionAnual extends Model
         'criterios',
         'bibliografia',
         'diagnostico',
-        'areas_id',
+        'area_id',
         'persona_cargo_cursado_id',
         'tipo_planificacion',
     ];
@@ -28,7 +28,7 @@ class PlanificacionAnual extends Model
 
     public function area(): BelongsTo
     {
-        return $this->belongsTo(Area::class, 'areas_id');
+        return $this->belongsTo(Area::class, 'area_id');
     }
 
     public function personaCargoCursado(): BelongsTo

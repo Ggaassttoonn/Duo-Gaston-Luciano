@@ -16,7 +16,27 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->statefulApi();
+        $middleware->redirectGuestsTo(null);
+
+        $middleware->api(prepend: [
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'api/auth/*',
+            'api/users/*',
+            'api/planillas*',
+            'api/notifications*',
+            'api/notifications/*',
+            'api/sent-reports*',
+            'api/sent-reports/*',
+            'api/deadlines*',
+            'api/deadlines/*',
+            'api/assignments/*',
+            'api/my-assignments',
+            'api/calendario',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (ValidationException $e) {

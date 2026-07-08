@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\EstadoDiaria;
-use App\Services\EstadoDiariaService;
 use App\Http\Requests\EstadoDiaria\StoreEstadoDiariaRequest;
 use App\Http\Requests\EstadoDiaria\UpdateEstadoDiariaRequest;
 use App\Http\Resources\EstadoDiariaResource;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\Interfaces\EstadoDiariaServiceInterface;
+
 class EstadoDiariaController extends Controller
 {
     public function __construct(private EstadoDiariaServiceInterface $estadoDiariaService)
@@ -44,7 +44,8 @@ class EstadoDiariaController extends Controller
     public function destroy(EstadoDiaria $estadoDiaria): JsonResponse
     {
         $this->estadoDiariaService->delete($estadoDiaria);
-        return response()->json(['message' => 'Estado diario eliminado exitosamente']);
+
+        return response()->json(null, 204);
     }
-    
+
 }

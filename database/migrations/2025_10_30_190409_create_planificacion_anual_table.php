@@ -16,7 +16,7 @@ return new class extends Migration
             $table->longText('criterios');
             $table->longText('bibliografia');
             $table->longText('diagnostico');
-            $table->foreignId('areas_id')->constrained()->onDelete('cascade');
+            $table->foreignId('area_id')->constrained('areas')->onDelete('cascade');
             $table->foreignId('persona_cargo_cursado_id')->constrained('persona_cargo_cursado')->onDelete('cascade');
             $table->string('tipo_planificacion');
             $table->timestamps();

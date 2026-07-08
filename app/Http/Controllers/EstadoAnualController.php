@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\EstadoAnual;
-use App\Services\EstadoAnualService;
 use App\Http\Requests\EstadoAnual\StoreEstadoAnualRequest;
 use App\Http\Requests\EstadoAnual\UpdateEstadoAnualRequest;
 use App\Http\Resources\EstadoAnualResource;
@@ -45,7 +44,7 @@ class EstadoAnualController extends Controller
     public function destroy(EstadoAnual $estadoAnual): JsonResponse
     {
         $this->estadoAnualService->delete($estadoAnual);
-        return response()->json(['message' => 'Estado anual eliminado exitosamente']);
+
+        return response()->json(null, 204);
     }
-   
 }

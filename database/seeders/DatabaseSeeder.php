@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AreasSeeder::class,
             CargoSeeder::class,
+            RevistaSeeder::class,
+            MateriasSeeder::class,
             PersonasSeeder::class,
             PersonaCargoSeeder::class,
             CursosSeeder::class,
@@ -26,7 +28,8 @@ class DatabaseSeeder extends Seeder
             EstadoDiariaSeeder::class,
             PlanificacionAnualSeeder::class,
             PlanificacionDiariaSeeder::class,
-            RevistaSeeder::class,
+            UsersSeeder::class,
+            PlanillaTestSeeder::class,
         ]);
     }
 }

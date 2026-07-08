@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('anio_lectivo', 40);
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
-            $table->foreignId('cursos_id')->constrained()->onDelete('restrict');
+            $table->foreignId('curso_id')->constrained('cursos')->onDelete('restrict');
             $table->timestamps();
         });
     }

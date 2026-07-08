@@ -21,6 +21,8 @@ use App\Contracts\Interfaces\PersonaCargoCursadoServiceInterface;
 use App\Services\PersonaCargoCursadoService;
 use App\Contracts\Interfaces\PersonaServiceInterface;
 use App\Services\PersonaService;
+use App\Contracts\Interfaces\MateriaServiceInterface;
+use App\Services\MateriaService;
 use App\Contracts\Interfaces\PlanificacionAnualServiceInterface;
 use App\Services\PlanificacionAnualService;
 use App\Contracts\Interfaces\PlanificacionDiariaServiceInterface;
@@ -31,6 +33,10 @@ use App\Contracts\Interfaces\PlanillaServiceInterface;
 use App\Services\PlanillaService;
 use App\Contracts\Interfaces\SitRevistaServiceInterface;
 use App\Services\SitRevistaService;
+use App\Contracts\Interfaces\DeadlineServiceInterface;
+use App\Services\DeadlineService;
+use App\Contracts\Interfaces\AssignmentServiceInterface;
+use App\Services\AssignmentService;
 use App\Repositories\AreaRepository;
 use App\Contracts\Repositories\AreaRepositoryInterface;
 use App\Repositories\CargoRepository;
@@ -47,6 +53,8 @@ use App\Contracts\Repositories\PersonaCargoRepositoryInterface;
 use App\Repositories\PersonaCargoRepository;
 use App\Contracts\Repositories\PersonaRepositoryInterface;
 use App\Repositories\PersonaRepository;
+use App\Contracts\Repositories\MateriaRepositoryInterface;
+use App\Repositories\MateriaRepository;
 use App\Contracts\Repositories\PlanificacionAnualRepositoryInterface;
 use App\Repositories\PlanificacionAnualRepository;
 use App\Contracts\Repositories\PlanificacionDiariaRepositoryInterface;
@@ -93,6 +101,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             CursoServiceInterface::class,
             CursoService::class
+        );
+
+        $this->app->bind(
+            MateriaServiceInterface::class,
+            MateriaService::class
         );
 
         $this->app->bind(
@@ -173,6 +186,16 @@ class AppServiceProvider extends ServiceProvider
             SitRevistaServiceInterface::class,
             SitRevistaService::class
         );
+
+        $this->app->bind(
+            DeadlineServiceInterface::class,
+            DeadlineService::class
+        );
+
+        $this->app->bind(
+            AssignmentServiceInterface::class,
+            AssignmentService::class
+        );
         $this->app->bind(
             AreaRepositoryInterface::class,
             AreaRepository::class
@@ -191,6 +214,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             CursoRepositoryInterface::class,
             CursoRepository::class
+        );
+
+        $this->app->bind(
+            MateriaRepositoryInterface::class,
+            MateriaRepository::class
         );
 
         $this->app->bind(

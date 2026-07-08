@@ -8,11 +8,27 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PlanificacionDiariaRepository implements PlanificacionDiariaRepositoryInterface
 {
-    public function getAllPaginated(int $perPage = 15): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, ?string $search = null): LengthAwarePaginator
     {
-        return PlanificacionDiaria::with([
-            'personaCargoCursado',
-        ])->paginate($perPage);
+        $query = PlanificacionDiaria::with([
+            'personaCargoCursado.personaCargo.persona',
+            'personaCargoCursado.personaCargo.cargo',
+        ]);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('personaCargoCursado.personaCargo.persona', function ($personaQuery) use ($search) {
+                    $personaQuery->where('apellidos', 'like', "%{$search}%")
+                        ->orWhere('nombres', 'like', "%{$search}%");
+                })
+                ->orWhere('contenidos_especificos', 'like', "%{$search}%")
+                ->orWhere('actividades', 'like', "%{$search}%")
+                ->orWhere('tareas', 'like', "%{$search}%")
+                ->orWhere('tipo_planificacion', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->paginate($perPage);
     }
 
     public function getById(PlanificacionDiaria $planificacionDiaria): PlanificacionDiaria

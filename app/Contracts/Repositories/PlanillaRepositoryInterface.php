@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface PlanillaRepositoryInterface
 {
-    public function getByPersonaId(int $personaId): Collection;
+    public function getByUserId(int $userId, ?string $search = null, ?int $directorId = null): Collection;
 
-    public function getByDirectorId(int $directorId): Collection;
+    public function getByDirectorId(int $directorId, ?string $search = null, ?int $docenteId = null): Collection;
 
     public function findById(int $id): ?Planilla;
 

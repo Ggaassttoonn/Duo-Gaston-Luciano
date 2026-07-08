@@ -11,13 +11,13 @@ class Planilla extends Model
     protected $fillable = [
         'titulo',
         'contenido',
-        'persona_id',
+        'user_id',
         'estado',
     ];
 
-    public function persona(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Users::class, 'persona_id');
+        return $this->belongsTo(Users::class, 'user_id');
     }
 
     public function destinatarios(): HasMany

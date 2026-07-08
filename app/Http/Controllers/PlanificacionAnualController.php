@@ -7,6 +7,7 @@ use App\Http\Requests\PlanificacionAnual\StorePlanificacionAnualRequest;
 use App\Http\Requests\PlanificacionAnual\UpdatePlanificacionAnualRequest;
 use App\Http\Resources\PlanificacionAnualResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use App\Contracts\Interfaces\PlanificacionAnualServiceInterface;
 
 class PlanificacionAnualController extends Controller
@@ -15,9 +16,10 @@ class PlanificacionAnualController extends Controller
         private PlanificacionAnualServiceInterface $planificacionAnualService
     ) {}
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $planificaciones = $this->planificacionAnualService->getAllPaginated();
+        $search = $request->query('search');
+        $planificaciones = $this->planificacionAnualService->getAllPaginated(15, $search);
         return PlanificacionAnualResource::collection($planificaciones)->response();
     }
 

@@ -12,7 +12,7 @@ class Cursado extends Model
         'anio_lectivo',
         'fecha_inicio',
         'fecha_fin',
-        'cursos_id',
+        'curso_id',
     ];
 
     protected $casts = [
@@ -22,11 +22,11 @@ class Cursado extends Model
 
     public function curso(): BelongsTo
     {
-        return $this->belongsTo(Curso::class, 'cursos_id');
+        return $this->belongsTo(Curso::class, 'curso_id');
     }
 
     public function personaCargoCursados(): HasMany
     {
-        return $this->hasMany(PersonaCargoCursado::class, 'cursados_id');
+        return $this->hasMany(PersonaCargoCursado::class, 'cursado_id');
     }
 }

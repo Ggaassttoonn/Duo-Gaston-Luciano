@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\PersonaCargoCursado;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -21,7 +21,7 @@ class UpdatePersonaCargoCursadoRequest extends FormRequest
     {
         return [
             'persona_cargos_id' => 'sometimes|required|integer|exists:persona_cargos,id',
-            'cursados_id'       => 'sometimes|required|integer|exists:cursados,id',
+            'cursado_id'       => 'sometimes|required|integer|exists:cursados,id',
         ];
     }
 }

@@ -16,7 +16,6 @@ class StorePlanillaRequest extends FormRequest
         return [
             'titulo'     => ['required', 'string', 'max:255'],
             'contenido'  => ['required', 'string'],
-            'persona_id' => ['required', 'integer', 'exists:users,id'],
             'directores' => ['sometimes', 'array'],
             'directores.*' => ['integer', 'exists:users,id'],
         ];
@@ -27,8 +26,6 @@ class StorePlanillaRequest extends FormRequest
         return [
             'titulo.required'     => 'El título es obligatorio.',
             'contenido.required'  => 'El contenido es obligatorio.',
-            'persona_id.required' => 'La persona es obligatoria.',
-            'persona_id.exists'   => 'La persona no existe.',
         ];
     }
 }

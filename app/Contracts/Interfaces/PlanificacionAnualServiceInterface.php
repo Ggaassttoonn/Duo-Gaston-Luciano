@@ -8,7 +8,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 interface PlanificacionAnualServiceInterface
 {
     public function getAllPaginated(
-        int $perPage = 15
+        int $perPage = 15,
+        ?string $search = null
     ): LengthAwarePaginator;
 
     public function getById(

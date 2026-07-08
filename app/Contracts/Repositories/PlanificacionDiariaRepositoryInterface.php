@@ -7,7 +7,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface PlanificacionDiariaRepositoryInterface
 {
-    public function getAllPaginated(int $perPage = 15): LengthAwarePaginator;
+    public function getAllPaginated(int $perPage = 15, ?string $search = null): LengthAwarePaginator;
 
     public function getById(PlanificacionDiaria $planificacionDiaria): PlanificacionDiaria;
 

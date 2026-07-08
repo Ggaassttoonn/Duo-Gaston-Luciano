@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\PersonaCargoCursado;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,7 +25,7 @@ class StorePersonaCargoCursadoRequest extends FormRequest
                 'integer',
                 'exists:persona_cargos,id', 
             ],
-            'cursados_id' => [
+            'cursado_id' => [
                 'required',
                 'integer',
                 'exists:cursados,id', 
@@ -40,7 +40,7 @@ class StorePersonaCargoCursadoRequest extends FormRequest
     {
         return [
             'persona_cargos_id.exists' => 'El cargo de la persona seleccionado no es válido.',
-            'cursados_id.exists' => 'El cursado seleccionado no existe.',
+            'cursado_id.exists' => 'El cursado seleccionado no existe.',
         ];
     }
 }

@@ -11,19 +11,19 @@ class PersonaCargo extends Model
     protected $table = 'persona_cargos';
 
     protected $fillable = [
-        'personas_id',
-        'cargos_id',
+        'persona_id',
+        'cargo_id',
         'sit_revista_id',
     ];
 
     public function persona(): BelongsTo
     {
-        return $this->belongsTo(Persona::class, 'personas_id');
+        return $this->belongsTo(Persona::class, 'persona_id');
     }
 
     public function cargo(): BelongsTo
     {
-        return $this->belongsTo(Cargo::class, 'cargos_id');
+        return $this->belongsTo(Cargo::class, 'cargo_id');
     }
 
     public function sitRevista(): BelongsTo

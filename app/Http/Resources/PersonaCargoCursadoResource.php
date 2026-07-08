@@ -11,7 +11,7 @@ class PersonaCargoCursadoResource extends BaseResource
         return [
             'id' => $this->id,
             'persona_cargos_id' => $this->persona_cargos_id,
-            'cursados_id' => $this->cursados_id,
+            'cursado_id' => $this->cursado_id,
             'persona_cargo' => PersonaCargoResource::make($this->whenLoaded('personaCargo')),
             'cursado' => CursadoResource::make($this->whenLoaded('cursado')),
             'planificaciones_anuales' => PlanificacionAnualResource::collection($this->whenLoaded('planificacionesAnuales')),

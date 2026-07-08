@@ -14,6 +14,6 @@ class Area extends Model
 
     public function planificacionesAnuales(): HasMany
     {
-        return $this->hasMany(PlanificacionAnual::class, 'areas_id');
+        return $this->hasMany(PlanificacionAnual::class, 'area_id');
     }
 }

@@ -8,12 +8,32 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PlanificacionAnualRepository implements PlanificacionAnualRepositoryInterface
 {
-    public function getAllPaginated(int $perPage = 15): LengthAwarePaginator
+    public function getAllPaginated(int $perPage = 15, ?string $search = null): LengthAwarePaginator
     {
-        return PlanificacionAnual::with([
+        $query = PlanificacionAnual::with([
             'area',
-            'personaCargoCursado',
-        ])->paginate($perPage);
+            'personaCargoCursado.personaCargo.persona',
+            'personaCargoCursado.personaCargo.cargo',
+        ]);
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('area', function ($areaQuery) use ($search) {
+                    $areaQuery->where('area', 'like', "%{$search}%");
+                })
+                ->orWhereHas('personaCargoCursado.personaCargo.persona', function ($personaQuery) use ($search) {
+                    $personaQuery->where('apellidos', 'like', "%{$search}%")
+                        ->orWhere('nombres', 'like', "%{$search}%");
+                })
+                ->orWhere('aprendizajes_esperados', 'like', "%{$search}%")
+                ->orWhere('saberes', 'like', "%{$search}%")
+                ->orWhere('criterios', 'like', "%{$search}%")
+                ->orWhere('diagnostico', 'like', "%{$search}%")
+                ->orWhere('tipo_planificacion', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->paginate($perPage);
     }
 
     public function getById(PlanificacionAnual $planificacionAnual): PlanificacionAnual

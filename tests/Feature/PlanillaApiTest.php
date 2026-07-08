@@ -57,35 +57,35 @@ class PlanillaApiTest extends TestCase
         ]);
     }
 
-    public function test_list_planillas_requires_persona_id(): void
+    public function test_list_planillas_requires_user_id(): void
     {
         $this->actingAs($this->user);
 
         $response = $this->getJson('/api/planillas');
 
         $response->assertStatus(400)
-            ->assertJson(['message' => 'persona_id es requerido.']);
+            ->assertJson(['message' => 'user_id es requerido.']);
     }
 
-    public function test_list_planillas_by_persona_id(): void
+    public function test_list_planillas_by_user_id(): void
     {
         $this->actingAs($this->user);
 
         Planilla::create([
             'titulo'     => 'Planilla 1',
             'contenido'  => 'Contenido 1',
-            'persona_id' => $this->user->id,
+            'user_id' => $this->user->id,
             'estado'     => 'borrador',
         ]);
 
         Planilla::create([
             'titulo'     => 'Planilla 2',
             'contenido'  => 'Contenido 2',
-            'persona_id' => $this->user->id,
+            'user_id' => $this->user->id,
             'estado'     => 'pendiente',
         ]);
 
-        $response = $this->getJson('/api/planillas?persona_id=' . $this->user->id);
+        $response = $this->getJson('/api/planillas?user_id=' . $this->user->id);
 
         $response->assertStatus(200);
     }
@@ -97,11 +97,11 @@ class PlanillaApiTest extends TestCase
         $response = $this->postJson('/api/planillas', [
             'titulo'     => 'Planilla de Prueba',
             'contenido'  => 'Este es el contenido de la planilla.',
-            'persona_id' => $this->user->id,
+            'user_id' => $this->user->id,
         ]);
 
         $response->assertStatus(201)
-            ->assertJsonStructure(['id', 'titulo', 'contenido', 'persona_id', 'estado', 'created_at', 'updated_at'])
+            ->assertJsonStructure(['id', 'titulo', 'contenido', 'user_id', 'estado', 'created_at', 'updated_at'])
             ->assertJsonPath('titulo', 'Planilla de Prueba')
             ->assertJsonPath('estado', 'borrador');
 
@@ -115,7 +115,7 @@ class PlanillaApiTest extends TestCase
         $response = $this->postJson('/api/planillas', [
             'titulo'     => 'Planilla con Director',
             'contenido'  => 'Contenido con director.',
-            'persona_id' => $this->user->id,
+            'user_id' => $this->user->id,
             'directores' => [$this->director->id],
         ]);
 
@@ -133,7 +133,7 @@ class PlanillaApiTest extends TestCase
         $planilla = Planilla::create([
             'titulo'     => 'Planilla Original',
             'contenido'  => 'Contenido original.',
-            'persona_id' => $this->user->id,
+            'user_id' => $this->user->id,
             'estado'     => 'borrador',
         ]);
 
@@ -151,7 +151,7 @@ class PlanillaApiTest extends TestCase
         $planilla = Planilla::create([
             'titulo'     => 'Planilla para Revisión',
             'contenido'  => 'Contenido a revisar.',
-            'persona_id' => $this->user->id,
+            'user_id' => $this->user->id,
             'estado'     => 'pendiente',
         ]);
 
@@ -172,7 +172,7 @@ class PlanillaApiTest extends TestCase
         $planilla = Planilla::create([
             'titulo'     => 'Planilla para Revisar',
             'contenido'  => 'Contenido a revisar.',
-            'persona_id' => $this->user->id,
+            'user_id' => $this->user->id,
             'estado'     => 'pendiente',
         ]);
 
@@ -199,11 +199,11 @@ class PlanillaApiTest extends TestCase
         $response = $this->postJson('/api/planillas', [
             'titulo'     => '',
             'contenido'  => '',
-            'persona_id' => 99999,
+            'user_id' => 99999,
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['titulo', 'contenido', 'persona_id']);
+            ->assertJsonValidationErrors(['titulo', 'contenido', 'user_id']);
     }
 
     public function test_revision_without_being_destinatario_fails(): void
@@ -211,7 +211,7 @@ class PlanillaApiTest extends TestCase
         $planilla = Planilla::create([
             'titulo'     => 'Planilla',
             'contenido'  => 'Contenido.',
-            'persona_id' => $this->user->id,
+            'user_id' => $this->user->id,
             'estado'     => 'pendiente',
         ]);
 

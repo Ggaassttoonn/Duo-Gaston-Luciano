@@ -50,7 +50,7 @@ class PlanificacionAnualSeeder extends Seeder
                     '• Libros escolares de áreas integradas (Ediciones 2025/2026).' . "\n" .
                     '• Material pedagógico provisto por el Ministerio de Educación.',
 
-                'areas_id' => $area->id,
+                'area_id' => $area->id,
                 'persona_cargo_cursado_id' => $asignacion->id,
                 'tipo_planificacion' => 'Anual Obligatoria', // O "Ajuste Curricular", "Proyecto Corto", etc.
             ]);

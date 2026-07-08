@@ -8,6 +8,7 @@ use App\Http\Requests\Curso\StoreCursoRequest;
 use App\Http\Requests\Curso\UpdateCursoRequest;
 use App\Http\Resources\CursoResource;
 use App\Contracts\Interfaces\CursoServiceInterface;
+
 class CursoController extends Controller
 {
     public function __construct(
@@ -24,7 +25,9 @@ class CursoController extends Controller
 
     public function show(Curso $curso): JsonResponse
     {
-        return response()->json(CursoResource::make($curso));
+        $cursoResuelto = $this->cursoService->getById($curso);
+
+        return response()->json(CursoResource::make($cursoResuelto));
     }
 
     public function store(StoreCursoRequest $request): JsonResponse
@@ -52,9 +55,7 @@ class CursoController extends Controller
     {
         $this->cursoService->delete($curso);
 
-        return response()->json([
-            'message' => 'Curso eliminado exitosamente'
-        ]);
+        return response()->json(null, 204);
     }
 
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\PlanificacionDiaria\StorePlanificacionDiariaRequest;
 use App\Http\Requests\PlanificacionDiaria\UpdatePlanificacionDiariaRequest;
 use App\Http\Resources\PlanificacionDiariaResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use App\Contracts\Interfaces\PlanificacionDiariaServiceInterface;
 
 class PlanificacionDiariaController extends Controller
@@ -15,9 +16,10 @@ class PlanificacionDiariaController extends Controller
         private PlanificacionDiariaServiceInterface $planificacionDiariaService
     ) {}
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $planificaciones = $this->planificacionDiariaService->getAllPaginated();
+        $search = $request->query('search');
+        $planificaciones = $this->planificacionDiariaService->getAllPaginated(15, $search);
         return PlanificacionDiariaResource::collection($planificaciones)->response();
     }
 

@@ -26,6 +26,6 @@ class Persona extends Model
 
     public function cargos(): HasMany
     {
-        return $this->hasMany(PersonaCargo::class, 'personas_id');
+        return $this->hasMany(PersonaCargo::class, 'persona_id');
     }
 }

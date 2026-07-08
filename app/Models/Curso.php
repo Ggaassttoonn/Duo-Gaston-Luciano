@@ -16,6 +16,6 @@ class Curso extends Model
 
     public function cursados(): HasMany
     {
-        return $this->hasMany(Cursado::class, 'cursos_id');
+        return $this->hasMany(Cursado::class, 'curso_id');
     }
 }

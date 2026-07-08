@@ -5,10 +5,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CargoController;
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\CalendarioController;
+use App\Http\Controllers\DeadlineController;
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\CursadoController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\EstadoAnualController;
 use App\Http\Controllers\EstadoDiariaController;
+use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\PersonaCargoController;
 use App\Http\Controllers\PersonaCargoCursadoController;
 use App\Http\Controllers\PersonaController;
@@ -21,12 +25,14 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PlanillaRevisionController;
 use App\Http\Controllers\PlanillaStateController;
 use App\Http\Controllers\SentReportController;
+use App\Http\Controllers\PrintController;
 
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me'])->name('auth.me');
+    Route::get('/auth/profile', [AuthController::class, 'me'])->name('auth.profile.show');
     Route::put('/auth/profile', [AuthController::class, 'updateProfile'])->name('auth.profile');
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
     Route::get('/auth/preferences', [AuthController::class, 'getPreferences'])->name('auth.preferences');
@@ -41,23 +47,36 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json(['foto' => $user->foto]);
     });
 
-    Route::delete('/users/{id}', function ($id) {
-        $user = Users::findOrFail($id);
-        if ($user->role === 'admin') {
-            return response()->json(['message' => 'No se puede eliminar un administrador.'], 403);
+    Route::delete('/users/{id}', function (Request $request, $id) {
+        $authUser = $request->user();
+        if (!in_array($authUser->role, ['admin', 'director'])) {
+            return response()->json(['message' => 'Solo los administradores pueden eliminar usuarios.'], 403);
         }
-        $user->delete();
+
+        $targetUser = Users::findOrFail($id);
+        if (in_array($targetUser->role, ['admin', 'director'])) {
+            return response()->json(['message' => 'No se puede eliminar a otro administrador.'], 403);
+        }
+
+        $targetUser->delete();
         return response()->json(['message' => 'Usuario eliminado correctamente.']);
     });
 
     Route::put('/users/{id}/role', function (Request $request, $id) {
-        $user = Users::findOrFail($id);
-        if ($user->role === 'admin') {
-            return response()->json(['message' => 'No se puede cambiar el rol de un administrador.'], 403);
+        $authUser = $request->user();
+        if (!in_array($authUser->role, ['admin', 'director'])) {
+            return response()->json(['message' => 'Solo los administradores pueden cambiar roles.'], 403);
         }
-        $user->role = $request->input('role');
-        $user->save();
-        return response()->json(['message' => 'Rol actualizado correctamente.'], 200);
+
+        $targetUser = Users::findOrFail($id);
+        if (in_array($targetUser->role, ['admin', 'director'])) {
+            return response()->json(['message' => 'No se puede cambiar el rol de otro administrador.'], 403);
+        }
+
+        $validated = $request->validate(['role' => 'required|string|in:docente,admin,director']);
+        $targetUser->role = $validated['role'];
+        $targetUser->save();
+        return response()->json(['message' => 'Rol actualizado correctamente.', 'user' => $targetUser], 200);
     });
 
     Route::get('/planillas', [PlanillaController::class, 'index'])->name('planillas.index');
@@ -65,6 +84,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/planillas/{planilla}', [PlanillaController::class, 'update'])->name('planillas.update');
     Route::get('/planillas-recibidas', [PlanillaController::class, 'recibidas'])->name('planillas.recibidas');
     Route::put('/planillas/{planilla}/revision', [PlanillaController::class, 'revision'])->name('planillas.revision');
+    Route::delete('/planillas/{planilla}', [PlanillaController::class, 'destroy'])->name('planillas.destroy');
 
     Route::apiResource('areas', AreaController::class);
     Route::apiResource('cargos', CargoController::class);
@@ -73,11 +93,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('sit-revistas', SitRevistaController::class);
     Route::apiResource('planificaciones-diarias', PlanificacionDiariaController::class);
     Route::apiResource('planificaciones-anuales', PlanificacionAnualController::class);
+    Route::get('/calendario', [CalendarioController::class, 'index'])->name('calendario.index');
+
+    Route::get('/deadlines', [DeadlineController::class, 'index'])->name('deadlines.index');
+    Route::post('/deadlines', [DeadlineController::class, 'store'])->name('deadlines.store');
+    Route::get('/deadlines/{deadline}', [DeadlineController::class, 'show'])->name('deadlines.show');
+    Route::put('/deadlines/{deadline}', [DeadlineController::class, 'update'])->name('deadlines.update');
+    Route::delete('/deadlines/{deadline}', [DeadlineController::class, 'destroy'])->name('deadlines.destroy');
+
+    Route::get('/deadlines/{deadline}/assignments', [AssignmentController::class, 'getAssignments'])->name('deadlines.assignments');
+    Route::patch('/assignments/{assignment}', [AssignmentController::class, 'update'])->name('assignments.update');
+    Route::get('/my-assignments', [AssignmentController::class, 'getMyAssignments'])->name('assignments.my');
+
     Route::apiResource('persona-cargo-cursados', PersonaCargoCursadoController::class);
     Route::apiResource('estados-diarias', EstadoDiariaController::class);
     Route::apiResource('cursados', CursadoController::class);
     Route::apiResource('estados-anuales', EstadoAnualController::class);
     Route::apiResource('cursos', CursoController::class);
+    Route::apiResource('materias', MateriaController::class);
 
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications', [NotificationController::class, 'store']);
@@ -93,4 +126,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/sent-reports', [SentReportController::class, 'index']);
     Route::post('/sent-reports', [SentReportController::class, 'store']);
+
+    Route::get('/planificaciones-diarias/{id}/print', [PrintController::class, 'diaria'])->name('planificaciones.diarias.print');
+    Route::get('/planificaciones-anuales/{id}/print', [PrintController::class, 'anual'])->name('planificaciones.anuales.print');
 });

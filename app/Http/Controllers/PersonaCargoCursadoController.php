@@ -6,8 +6,6 @@ use App\Models\PersonaCargoCursado;
 use App\Http\Requests\PersonaCargoCursado\StorePersonaCargoCursadoRequest;
 use App\Http\Requests\PersonaCargoCursado\UpdatePersonaCargoCursadoRequest;
 use App\Http\Resources\PersonaCargoCursadoResource;
-use App\Services\PersonaCargoCursadoService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Contracts\Interfaces\PersonaCargoCursadoServiceInterface;
 

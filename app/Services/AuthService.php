@@ -9,6 +9,7 @@ use App\Http\Resources\UsersResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class AuthService implements AuthServiceInterface
@@ -36,23 +37,23 @@ class AuthService implements AuthServiceInterface
 
     public function register(array $data): array
     {
-        $parts = explode(' ', $data['name'], 2);
+        $parts = explode(' ', trim($data['name']), 2);
         $nombres = $parts[0];
-        $apellidos = $parts[1] ?? $nombres;
+        $apellidos = $parts[1] ?? '';
 
         $persona = Persona::firstOrCreate(
             ['email' => $data['email']],
             [
                 'apellidos'        => $apellidos,
                 'nombres'          => $nombres,
-                'dni'              => 'TEMP-' . uniqid(),
+                'dni'              => 'TEMP-' . Str::uuid(),
                 'telefono'         => '',
                 'direccion'        => '',
                 'fecha_nacimiento' => now()->toDateString(),
             ]
         );
 
-        $user = Users::create([
+        Users::create([
             'persona_id' => $persona->id,
             'name'       => $data['name'],
             'email'      => $data['email'],
@@ -60,13 +61,8 @@ class AuthService implements AuthServiceInterface
             'role'       => $data['role'] ?? 'docente',
         ]);
 
-        $token = $user->createToken('auth-token')->plainTextToken;
-
-        $user->load('persona');
-
         return [
-            'user' => UsersResource::make($user)->resolve(),
-            'token' => $token,
+            'message' => 'Usuario registrado correctamente.',
         ];
     }
 
@@ -98,8 +94,16 @@ class AuthService implements AuthServiceInterface
             $user->name = $data['name'];
         }
 
-        if (isset($data['foto'])) {
-            $user->foto = $this->saveFoto($data['foto']);
+        if (array_key_exists('foto', $data)) {
+            if (is_null($data['foto'])) {
+                $oldFoto = $user->foto;
+                $user->foto = null;
+                $this->deleteOldFoto($oldFoto);
+            } else {
+                $oldFoto = $user->foto;
+                $user->foto = $this->saveFoto($data['foto']);
+                $this->deleteOldFoto($oldFoto);
+            }
         }
 
         $user->save();
@@ -165,17 +169,20 @@ class AuthService implements AuthServiceInterface
             ]);
         }
 
-        $extension = strtolower(
-            preg_replace('/^data:image\/(\w+);base64,/', '$1', $dataUrl)
-        );
-
-        $filename = 'fotos/' . uniqid() . '.' . $extension;
-
-        if (!is_dir(storage_path('app/public/fotos'))) {
-            Storage::disk('public')->makeDirectory('fotos');
+        $extension = '';
+        if (preg_match('/^data:image\/(\w+);base64,/', $dataUrl, $matches)) {
+            $extension = strtolower($matches[1]);
         }
 
-        Storage::disk('public')->put($filename, $imageData);
+        $dir = storage_path('app/public/fotos');
+        $filename = uniqid() . '.' . $extension;
+        $filepath = $dir . DIRECTORY_SEPARATOR . $filename;
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        file_put_contents($filepath, $imageData);
 
         $publicPath = public_path('storage');
 
@@ -183,11 +190,28 @@ class AuthService implements AuthServiceInterface
             try {
                 app('files')->link(storage_path('app/public'), $publicPath);
             } catch (\Exception $e) {
-                return Storage::disk('public')->url($filename);
+                return Storage::disk('public')->url('fotos/' . $filename);
             }
         }
 
-        return Storage::disk('public')->url($filename);
+        return Storage::disk('public')->url('fotos/' . $filename);
+    }
+
+    private function deleteOldFoto(?string $fotoUrl): void
+    {
+        if (empty($fotoUrl)) {
+            return;
+        }
+
+        $prefix = rtrim(Storage::disk('public')->url(''), '/') . '/';
+        $relativePath = str_replace($prefix, '', $fotoUrl);
+
+        if ($relativePath) {
+            $filepath = storage_path('app/public/' . $relativePath);
+            if (file_exists($filepath)) {
+                unlink($filepath);
+            }
+        }
     }
 
     public function logout(): void

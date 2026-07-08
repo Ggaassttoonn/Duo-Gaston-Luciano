@@ -29,7 +29,7 @@ class CursadoSeeder extends Seeder
                 'anio_lectivo' => $anioLectivo,
                 'fecha_inicio' => $inicioClases,
                 'fecha_fin' => $finClases,
-                'cursos_id' => $curso->id,
+                'curso_id' => $curso->id,
 
             ]);
         }

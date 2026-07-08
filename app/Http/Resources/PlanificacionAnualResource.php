@@ -16,7 +16,7 @@ class PlanificacionAnualResource extends BaseResource
             'criterios' => $this->criterios,
             'bibliografia' => $this->bibliografia,
             'diagnostico' => $this->diagnostico,
-            'areas_id' => $this->areas_id,
+            'area_id' => $this->area_id,
             'persona_cargo_cursado_id' => $this->persona_cargo_cursado_id,
             'tipo_planificacion' => $this->tipo_planificacion,
             'area' => AreaResource::make($this->whenLoaded('area')),

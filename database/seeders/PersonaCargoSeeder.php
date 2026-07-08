@@ -33,16 +33,16 @@ class PersonaCargoSeeder extends Seeder
 
 
         PersonaCargo::create([
-            'personas_id'    => $personas->get(0)->id,
-            'cargos_id'      => $cargoDirector->id,
+            'persona_id'    => $personas->get(0)->id,
+            'cargo_id'      => $cargoDirector->id,
             'sit_revista_id' => $sitTitular->id,
         ]);
 
 
         if ($personas->has(1)) {
             PersonaCargo::create([
-                'personas_id'    => $personas->get(1)->id,
-                'cargos_id'      => $cargoSecretario->id,
+                'persona_id'    => $personas->get(1)->id,
+                'cargo_id'      => $cargoSecretario->id,
                 'sit_revista_id' => $sitInterino->id,
             ]);
         }
@@ -59,8 +59,8 @@ class PersonaCargoSeeder extends Seeder
             }
 
             PersonaCargo::create([
-                'personas_id'    => $persona->id,
-                'cargos_id'      => $cargoId,
+                'persona_id'    => $persona->id,
+                'cargo_id'      => $cargoId,
                 'sit_revista_id' => $revistaId,
             ]);
         }

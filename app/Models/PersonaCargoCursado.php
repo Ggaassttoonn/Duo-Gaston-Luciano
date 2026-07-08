@@ -12,7 +12,7 @@ class PersonaCargoCursado extends Model
 
     protected $fillable = [
         'persona_cargos_id',
-        'cursados_id',
+        'cursado_id',
     ];
 
     public function personaCargo(): BelongsTo
@@ -22,7 +22,7 @@ class PersonaCargoCursado extends Model
 
     public function cursado(): BelongsTo
     {
-        return $this->belongsTo(Cursado::class, 'cursados_id');
+        return $this->belongsTo(Cursado::class, 'cursado_id');
     }
 
     public function planificacionesAnuales(): HasMany

@@ -11,6 +11,6 @@ class Cargo extends Model
 
     public function personaCargos(): HasMany
     {
-        return $this->hasMany(PersonaCargo::class, 'cargos_id');
+        return $this->hasMany(PersonaCargo::class, 'cargo_id');
     }
 }
