@@ -29,4 +29,9 @@ COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
 
 EXPOSE 80
-CMD ["supervisord", "-c", "/etc/supervisord.conf"]
+RUN echo "#!/bin/sh" > /start.sh \
+    && echo "php artisan migrate --force" >> /start.sh \
+    && echo "supervisord -c /etc/supervisord.conf" >> /start.sh \
+    && chmod +x /start.sh
+
+CMD ["/start.sh"]
