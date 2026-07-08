@@ -5,13 +5,13 @@ NGINX_PORT=${PORT:-8080}
 FPM_PORT=9000
 echo "Using nginx port: $NGINX_PORT, php-fpm port: $FPM_PORT"
 
-# Configurar php-fpm para usar TCP en localhost
+# Configurar php-fpm para usar TCP
 cat > /usr/local/etc/php-fpm.d/zz-docker.conf <<EOFPHP
 [global]
 daemonize = no
 
 [www]
-listen = 127.0.0.1:$FPM_PORT
+listen = $FPM_PORT
 EOFPHP
 
 # Asegurar directorios
