@@ -106,6 +106,14 @@ echo "=== ALL ENV ==="
 env | sort 2>/dev/null || echo "(env not found)"
 echo "================"
 
+echo "=== TEST RAILWAY PUBLIC URL ==="
+wget -S -O - --timeout=10 "http://${RAILWAY_PUBLIC_DOMAIN}:80/api/health" 2>&1 || echo "(public url failed: $?)"
+echo ""
+echo "=== TEST RAILWAY PRIVATE DOMAIN ==="
+wget -S -O - --timeout=5 "http://${RAILWAY_PRIVATE_DOMAIN}:8080/api/health" 2>&1 || echo "(private domain failed: $?)"
+echo ""
+echo "=============================="
+
 echo "=== WAITING FOR SUPERVISORD ==="
 date
 wait $SUPERVISORD_PID || true
