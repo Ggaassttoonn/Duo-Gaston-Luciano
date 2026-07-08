@@ -23,6 +23,9 @@ mkdir -p /etc/nginx/http.d /run/php
 # Limpiar config conflictiva
 rm -f /etc/nginx/conf.d/default.conf
 
+# Corregir usuario de nginx para que pueda leer el socket de php-fpm
+sed -i 's/^user nginx;/user www-data;/' /etc/nginx/nginx.conf
+
 # Generar nginx config con socket Unix
 cat > /etc/nginx/http.d/default.conf <<EOF
 server {
