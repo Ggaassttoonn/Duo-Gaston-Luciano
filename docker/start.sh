@@ -66,9 +66,13 @@ nginx -t 2>&1
 
 php artisan migrate --force 2>/dev/null || true
 
-# Mostrar puertos en escucha para diagnóstico
+supervisord -c /etc/supervisord.conf &
+SUPERVISORD_PID=$!
+
+sleep 3
+
 echo "=== LISTENING PORTS ==="
-(ss -tlnp 2>/dev/null || netstat -tlnp 2>/dev/null || echo "(no ss/netstat)") || true
+ss -tlnp 2>/dev/null || echo "(ss not found)"
 echo "======================="
 
-exec supervisord -c /etc/supervisord.conf
+wait $SUPERVISORD_PID || true
