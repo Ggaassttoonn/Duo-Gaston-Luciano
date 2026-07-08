@@ -5,6 +5,7 @@ FROM php:${PHP_VERSION} AS php
 RUN apk add --no-cache \
     nginx \
     supervisor \
+    iproute2 \
     linux-headers \
     libzip-dev \
     libpq-dev \
