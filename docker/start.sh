@@ -10,8 +10,22 @@ mkdir -p /etc/nginx/http.d /run/php
 # Limpiar config conflictiva
 rm -f /etc/nginx/conf.d/default.conf
 
+# Configurar php-fpm para loguear errores a stderr
+cat > /usr/local/etc/php-fpm.d/zz-docker.conf <<'EOFPHP'
+[global]
+daemonize = no
+error_log = /dev/stderr
+log_level = notice
+
+[www]
+listen = 9000
+access.log = /dev/stderr
+EOFPHP
+
 # Generar nginx config
 cat > /etc/nginx/http.d/default.conf <<EOF
+error_log /dev/stderr warn;
+
 server {
     listen $NGINX_PORT;
     server_name _;
@@ -20,6 +34,12 @@ server {
 
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-Content-Type-Options "nosniff";
+
+    location = /api/health {
+        access_log off;
+        default_type application/json;
+        return 200 '{"status":"ok","app":"BackPlanificar"}';
+    }
 
     location / {
         try_files \$uri \$uri/ /index.php?\$query_string;
