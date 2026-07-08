@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-NGINX_PORT=9000
+NGINX_PORT=${PORT:-8080}
 FPM_SOCK="/var/run/php-fpm.sock"
 echo "Using nginx port: $NGINX_PORT, php-fpm socket: $FPM_SOCK"
 
