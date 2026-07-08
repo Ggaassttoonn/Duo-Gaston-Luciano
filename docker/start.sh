@@ -98,4 +98,10 @@ wget -S -O - http://127.0.0.1:8080/ 2>&1 || echo "(wget exit code: $?)"
 echo ""
 echo "=============================="
 
+echo "=== WAITING FOR SUPERVISORD ==="
+date
 wait $SUPERVISORD_PID || true
+echo "=== SUPERVISORD EXITED (PID=$SUPERVISORD_PID) ==="
+date
+echo "=== Container would normally exit here ==="
+tail -f /dev/null
