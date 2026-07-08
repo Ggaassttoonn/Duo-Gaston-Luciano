@@ -77,6 +77,11 @@ echo "=== LISTENING PORTS ==="
 ss -tlnp 2>/dev/null || echo "(ss not found)"
 echo "======================="
 
+echo "=== IP ADDRESSES ==="
+hostname -i 2>/dev/null && echo "---" || echo "(hostname not found)"
+ip addr show 2>/dev/null | grep "inet " || echo "(ip not found)"
+echo "===================="
+
 echo "=== TESTING FPM CONNECTION ==="
 php -r '
 foreach(["127.0.0.1:9000","localhost:9000"] as $t){
