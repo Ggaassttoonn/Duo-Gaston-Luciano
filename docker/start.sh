@@ -87,9 +87,9 @@ foreach(["127.0.0.1:9000","localhost:9000"] as $t){
 ' 2>&1 || echo "(php test failed)"
 echo "=============================="
 
-echo "=== TESTING NGINX (localhost:8080) ==="
-wget -q -O - http://127.0.0.1:8080/api/health 2>&1 || curl -sf http://127.0.0.1:8080/api/health 2>&1 || echo "(wget/curl not found)"
+echo "=== TESTING NGINX ==="
+wget -q -O - http://127.0.0.1:8080/api/health 2>&1 || true
 echo ""
-echo "======================================"
+echo "======================"
 
 wait $SUPERVISORD_PID || true
