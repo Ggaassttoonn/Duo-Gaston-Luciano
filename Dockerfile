@@ -7,12 +7,13 @@ RUN apk add --no-cache \
     supervisor \
     linux-headers \
     libzip-dev \
+    libpq-dev \
     zip \
     unzip \
     git \
     gettext \
     $PHPIZE_DEPS \
-    && docker-php-ext-install pdo_mysql bcmath zip \
+    && docker-php-ext-install pdo_mysql pdo_pgsql bcmath zip \
     && pecl install redis \
     && docker-php-ext-enable redis
 
