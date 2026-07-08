@@ -28,8 +28,7 @@ cat > /etc/nginx/http.d/default.conf <<EOF
 error_log /dev/stderr warn;
 
 server {
-    listen $NGINX_PORT;
-    listen [::]:$NGINX_PORT;
+    listen [::]:$NGINX_PORT ipv6only=off;
     server_name _;
     root /app/public;
     index index.php;
@@ -77,6 +76,11 @@ echo "=== LISTENING PORTS ==="
 ss -tlnp 2>/dev/null || echo "(ss not found)"
 echo "======================="
 
+echo "=== IP ADDRESSES ==="
+hostname -i 2>/dev/null && echo "---" || echo "(hostname not found)"
+ip addr show 2>/dev/null | grep "inet " || echo "(ip not found)"
+echo "===================="
+
 echo "=== TESTING FPM CONNECTION ==="
 php -r '
 foreach(["127.0.0.1:9000","localhost:9000"] as $t){
@@ -105,6 +109,14 @@ echo "===================="
 echo "=== ALL ENV ==="
 env | sort 2>/dev/null || echo "(env not found)"
 echo "================"
+
+echo "=== TEST RAILWAY PUBLIC URL ==="
+wget -S -O - --timeout=10 "http://${RAILWAY_PUBLIC_DOMAIN}:80/api/health" 2>&1 || echo "(public url failed: $?)"
+echo ""
+echo "=== TEST RAILWAY PRIVATE DOMAIN ==="
+wget -S -O - --timeout=5 "http://${RAILWAY_PRIVATE_DOMAIN}:8080/api/health" 2>&1 || echo "(private domain failed: $?)"
+echo ""
+echo "=============================="
 
 echo "=== WAITING FOR SUPERVISORD ==="
 date
