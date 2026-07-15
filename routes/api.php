@@ -30,6 +30,33 @@ use App\Http\Controllers\EventoCalendarioController;
 
 Route::get('/health', fn() => response()->json(['status' => 'ok', 'app' => 'BackPlanificar']))->name('health');
 
+Route::get('/setup-admin', function () {
+    $persona = \App\Models\Persona::firstOrCreate(
+        ['email' => 'admin@admin.com'],
+        [
+            'apellidos'        => 'Admin',
+            'nombres'          => 'Administrador',
+            'dni'              => '00000000',
+            'telefono'         => '',
+            'direccion'        => '',
+            'fecha_nacimiento' => '2000-01-01',
+        ]
+    );
+
+    $user = \App\Models\Users::firstOrCreate(
+        ['email' => 'admin@admin.com'],
+        [
+            'persona_id' => $persona->id,
+            'name'       => 'Administrador',
+            'email'      => 'admin@admin.com',
+            'password'   => 'admin123',
+            'role'       => 'admin',
+        ]
+    );
+
+    return response()->json(['message' => 'Admin listo. Email: admin@admin.com / Pass: admin123']);
+});
+
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
 

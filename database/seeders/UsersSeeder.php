@@ -10,19 +10,27 @@ class UsersSeeder extends Seeder
 {
     public function run(): void
     {
-        $adminPersona = Persona::where('email', 'gastonazula@example.com')->first();
+        $adminPersona = Persona::firstOrCreate(
+            ['email' => 'admin@admin.com'],
+            [
+                'apellidos'        => 'Admin',
+                'nombres'          => 'Administrador',
+                'dni'              => '00000000',
+                'telefono'         => '',
+                'direccion'        => '',
+                'fecha_nacimiento' => '2000-01-01',
+            ]
+        );
 
-        if ($adminPersona) {
-            Users::firstOrCreate(
-                ['email' => 'admin@admin.com'],
-                [
-                    'persona_id' => $adminPersona->id,
-                    'name'       => 'Administrador',
-                    'email'      => 'admin@admin.com',
-                    'password'   => 'admin123',
-                    'role'       => 'admin',
-                ]
-            );
-        }
+        Users::firstOrCreate(
+            ['email' => 'admin@admin.com'],
+            [
+                'persona_id' => $adminPersona->id,
+                'name'       => 'Administrador',
+                'email'      => 'admin@admin.com',
+                'password'   => 'admin123',
+                'role'       => 'admin',
+            ]
+        );
     }
 }
