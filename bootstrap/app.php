@@ -24,18 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->validateCsrfTokens(except: [
-            'api/auth/*',
-            'api/users/*',
-            'api/planillas*',
-            'api/notifications*',
-            'api/notifications/*',
-            'api/sent-reports*',
-            'api/sent-reports/*',
-            'api/deadlines*',
-            'api/deadlines/*',
-            'api/assignments/*',
-            'api/my-assignments',
-            'api/calendario',
+            'api/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

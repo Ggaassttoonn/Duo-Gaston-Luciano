@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SentReport;
+use App\Models\Notification;
 use App\Http\Resources\SentReportResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -34,6 +35,14 @@ class SentReportController extends Controller
         $report = SentReport::create($data);
 
         $report->load('docente', 'planilla');
+
+        Notification::create([
+            'user_id' => $data['docente_id'],
+            'type' => 'reporte_recibido',
+            'title' => 'Nuevo reporte recibido',
+            'message' => $data['comentario'] ?: 'Tu director te envió un reporte.',
+            'planilla_id' => $data['planilla_id'] ?? null,
+        ]);
 
         return response()->json(SentReportResource::make($report), 201);
     }
