@@ -27,6 +27,9 @@ class NotificationController extends Controller
         if (!isset($input['type']) && isset($input['tipo'])) {
             $input['type'] = $input['tipo'];
         }
+        if (!isset($input['user_id']) && isset($input['docente_id'])) {
+            $input['user_id'] = $input['docente_id'];
+        }
         $request->merge($input);
 
         $data = $request->validate([
@@ -35,9 +38,13 @@ class NotificationController extends Controller
             'message' => 'nullable|string',
             'data' => 'nullable|array',
             'planilla_id' => 'nullable|integer|exists:planillas,id',
+            'user_id' => 'nullable|integer|exists:users,id',
         ]);
 
-        $data['user_id'] = $request->user()->id;
+        $currentUser = $request->user();
+        if (!isset($data['user_id']) || !in_array($currentUser->role, ['admin', 'director'])) {
+            $data['user_id'] = $currentUser->id;
+        }
 
         $notification = Notification::create($data);
 
