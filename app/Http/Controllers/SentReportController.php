@@ -54,11 +54,18 @@ class SentReportController extends Controller
             if (!empty($data['comentario'])) {
                 $notificationData['comentario'] = $data['comentario'];
             }
+            if ($report->planilla) {
+                $notificationData['titulo'] = $report->planilla->titulo;
+            }
+            $director = $request->user();
+            $notificationData['directores'] = trim(($director->apellidos ?? '') . ', ' . ($director->nombres ?? ''));
+            $notificationData['estado'] = 'reporte';
+            $notificationData['tipo'] = 'reporte';
 
             Notification::create([
                 'user_id' => $data['docente_id'],
-                'type' => 'reporte_recibido',
-                'title' => 'Nuevo reporte recibido',
+                'type' => 'reporte',
+                'title' => $report->planilla->titulo ?? 'Reporte',
                 'message' => $data['comentario'] ?: 'Tu director te envió un reporte.',
                 'planilla_id' => $data['planilla_id'] ?? null,
                 'data' => $notificationData,
