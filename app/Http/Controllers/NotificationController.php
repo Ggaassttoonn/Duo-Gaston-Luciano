@@ -47,6 +47,16 @@ class NotificationController extends Controller
                 $data['user_id'] = $currentUser->id;
             }
 
+            $extraData = [];
+            foreach (['audio_base64', 'audio_mime', 'comentario', 'docente', 'directores', 'titulo', 'estado', 'planillaId'] as $key) {
+                if (isset($input[$key])) {
+                    $extraData[$key] = $input[$key];
+                }
+            }
+            if (!empty($extraData)) {
+                $data['data'] = array_merge($data['data'] ?? [], $extraData);
+            }
+
             $notification = Notification::create($data);
 
             return response()->json([
