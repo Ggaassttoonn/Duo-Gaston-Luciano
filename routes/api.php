@@ -181,6 +181,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('materias', MateriaController::class);
 
     Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/{notification}/audio', [NotificationController::class, 'audio']);
     Route::post('/notifications', [NotificationController::class, 'store']);
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markRead']);

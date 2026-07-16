@@ -13,9 +13,33 @@ class NotificationController extends Controller
     {
         $notifications = Notification::where('user_id', $request->user()->id)
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($n) {
+                if ($n->data && isset($n->data['audio_base64'])) {
+                    $n->data['has_audio'] = true;
+                    unset($n->data['audio_base64']);
+                    unset($n->data['audio_mime']);
+                }
+                return $n;
+            });
 
         return NotificationResource::collection($notifications)->response();
+    }
+
+    public function audio(Request $request, Notification $notification): JsonResponse
+    {
+        if ($notification->user_id !== $request->user()->id) {
+            return response()->json(['message' => 'No autorizado.'], 403);
+        }
+
+        if (!$notification->data || empty($notification->data['audio_base64'])) {
+            return response()->json(['message' => 'Sin audio.'], 404);
+        }
+
+        return response()->json([
+            'audio_base64' => $notification->data['audio_base64'],
+            'audio_mime' => $notification->data['audio_mime'] ?? 'audio/webm',
+        ]);
     }
 
     public function store(Request $request): JsonResponse
