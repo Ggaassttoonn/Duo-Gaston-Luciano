@@ -107,6 +107,15 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json(['foto' => $user->foto]);
     });
 
+    Route::get('/users/{id}', function (Request $request, $id) {
+        $user = Users::select('id', 'name', 'email', 'role', 'foto', 'persona_id', 'created_at')->findOrFail($id);
+        $user->load('persona');
+        if ($user->foto && str_starts_with($user->foto, 'http://localhost')) {
+            $user->foto = str_replace(['http://localhost:8000', 'http://localhost'], $request->getSchemeAndHttpHost(), $user->foto);
+        }
+        return $user;
+    });
+
     Route::delete('/users/{id}', function (Request $request, $id) {
         $authUser = $request->user();
         if (!in_array($authUser->role, ['admin', 'director'])) {
