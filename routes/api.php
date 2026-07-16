@@ -147,6 +147,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/planillas', [PlanillaController::class, 'index'])->name('planillas.index');
+    Route::get('/planillas/stats', [PlanillaController::class, 'stats'])->name('planillas.stats');
     Route::post('/planillas', [PlanillaController::class, 'store'])->name('planillas.store');
     Route::put('/planillas/{planilla}', [PlanillaController::class, 'update'])->name('planillas.update');
     Route::get('/planillas-recibidas', [PlanillaController::class, 'recibidas'])->name('planillas.recibidas');

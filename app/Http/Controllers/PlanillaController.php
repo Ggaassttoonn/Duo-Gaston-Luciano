@@ -10,6 +10,7 @@ use App\Http\Resources\PlanillaResource;
 use App\Models\Planilla;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PlanillaController extends Controller
 {
@@ -78,5 +79,23 @@ class PlanillaController extends Controller
         $planilla = $this->planillaService->revisar($planilla->id, $request->validated(), $user->id);
 
         return response()->json(PlanillaResource::make($planilla));
+    }
+
+    public function stats(Request $request): JsonResponse
+    {
+        $userId = $request->user()->id;
+
+        $counts = Planilla::where('user_id', $userId)
+            ->select('estado', DB::raw('count(*) as total'))
+            ->groupBy('estado')
+            ->pluck('total', 'estado');
+
+        return response()->json([
+            'aprobadas' => $counts->get('aprobado', 0),
+            'en_revision' => $counts->get('revisado', 0) + $counts->get('pendiente', 0),
+            'rechazadas' => $counts->get('rechazado', 0),
+            'borrador' => $counts->get('borrador', 0),
+            'total' => $counts->sum(),
+        ]);
     }
 }

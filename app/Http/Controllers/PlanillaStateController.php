@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Planilla;
 use App\Models\PlanillaState;
+use App\Models\Notification;
 use App\Http\Resources\PlanillaStateResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -29,6 +31,20 @@ class PlanillaStateController extends Controller
             ['planilla_id' => $data['planilla_id'], 'user_id' => $data['user_id']],
             ['estado' => $data['estado']]
         );
+
+        $planilla = Planilla::find($data['planilla_id']);
+        if ($planilla) {
+            $planilla->estado = $data['estado'];
+            $planilla->save();
+
+            Notification::create([
+                'user_id' => $planilla->user_id,
+                'type' => 'planilla_' . $data['estado'],
+                'title' => 'Planilla ' . ucfirst($data['estado']),
+                'message' => "Tu planilla \"{$planilla->titulo}\" fue {$data['estado']}.",
+                'planilla_id' => $planilla->id,
+            ]);
+        }
 
         return response()->json(PlanillaStateResource::make($state), 201);
     }
