@@ -31,7 +31,7 @@ use App\Http\Controllers\EventoCalendarioController;
 Route::get('/health', fn() => response()->json(['status' => 'ok', 'app' => 'BackPlanificar']))->name('health');
 
 Route::get('/setup-admin', function () {
-    $persona = \App\Models\Persona::firstOrCreate(
+    $adminPersona = \App\Models\Persona::firstOrCreate(
         ['email' => 'admin@admin.com'],
         [
             'apellidos'        => 'Admin',
@@ -43,10 +43,10 @@ Route::get('/setup-admin', function () {
         ]
     );
 
-    $user = \App\Models\Users::firstOrCreate(
+    \App\Models\Users::firstOrCreate(
         ['email' => 'admin@admin.com'],
         [
-            'persona_id' => $persona->id,
+            'persona_id' => $adminPersona->id,
             'name'       => 'Administrador',
             'email'      => 'admin@admin.com',
             'password'   => 'admin123',
@@ -54,7 +54,30 @@ Route::get('/setup-admin', function () {
         ]
     );
 
-    return response()->json(['message' => 'Admin listo. Email: admin@admin.com / Pass: admin123']);
+    $dirPersona = \App\Models\Persona::firstOrCreate(
+        ['email' => 'klee54319@gmail.com'],
+        [
+            'apellidos'        => 'Ggaassttoonn',
+            'nombres'          => 'Director',
+            'dni'              => '99999999',
+            'telefono'         => '',
+            'direccion'        => '',
+            'fecha_nacimiento' => '2000-01-01',
+        ]
+    );
+
+    \App\Models\Users::firstOrCreate(
+        ['email' => 'klee54319@gmail.com'],
+        [
+            'persona_id' => $dirPersona->id,
+            'name'       => 'Ggaassttoonn',
+            'email'      => 'klee54319@gmail.com',
+            'password'   => 'admin123',
+            'role'       => 'director',
+        ]
+    );
+
+    return response()->json(['message' => 'Usuarios creados. Admin: admin@admin.com / Director: klee54319@gmail.com / Pass ambos: admin123']);
 });
 
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
