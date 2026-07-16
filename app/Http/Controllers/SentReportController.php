@@ -31,38 +31,46 @@ class SentReportController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $data = $request->validate([
-            'planilla_id' => 'nullable|integer|exists:planillas,id',
-            'docente_id' => 'required|integer|exists:users,id',
-            'comentario' => 'nullable|string',
-            'audio_base64' => 'nullable|string',
-            'audio_mime' => 'nullable|string',
-        ]);
+        try {
+            $data = $request->validate([
+                'planilla_id' => 'nullable|integer|exists:planillas,id',
+                'docente_id' => 'required|integer|exists:users,id',
+                'comentario' => 'nullable|string',
+                'audio_base64' => 'nullable|string',
+                'audio_mime' => 'nullable|string',
+            ]);
 
-        $data['director_id'] = $request->user()->id;
+            $data['director_id'] = $request->user()->id;
 
-        $report = SentReport::create($data);
+            $report = SentReport::create($data);
 
-        $report->load('docente', 'planilla');
+            $report->load('docente', 'planilla');
 
-        $notificationData = [];
-        if (!empty($data['audio_base64'])) {
-            $notificationData['audio_base64'] = $data['audio_base64'];
-            $notificationData['audio_mime'] = $data['audio_mime'] ?? 'audio/webm';
+            $notificationData = [];
+            if (!empty($data['audio_base64'])) {
+                $notificationData['audio_base64'] = $data['audio_base64'];
+                $notificationData['audio_mime'] = $data['audio_mime'] ?? 'audio/webm';
+            }
+            if (!empty($data['comentario'])) {
+                $notificationData['comentario'] = $data['comentario'];
+            }
+
+            Notification::create([
+                'user_id' => $data['docente_id'],
+                'type' => 'reporte_recibido',
+                'title' => 'Nuevo reporte recibido',
+                'message' => $data['comentario'] ?: 'Tu director te envió un reporte.',
+                'planilla_id' => $data['planilla_id'] ?? null,
+                'data' => $notificationData,
+            ]);
+
+            return response()->json(SentReportResource::make($report), 201);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Error al enviar reporte.',
+                'error' => $e->getMessage(),
+                'file' => basename($e->getFile()) . ':' . $e->getLine(),
+            ], 500);
         }
-        if (!empty($data['comentario'])) {
-            $notificationData['comentario'] = $data['comentario'];
-        }
-
-        Notification::create([
-            'user_id' => $data['docente_id'],
-            'type' => 'reporte_recibido',
-            'title' => 'Nuevo reporte recibido',
-            'message' => $data['comentario'] ?: 'Tu director te envió un reporte.',
-            'planilla_id' => $data['planilla_id'] ?? null,
-            'data' => $notificationData,
-        ]);
-
-        return response()->json(SentReportResource::make($report), 201);
     }
 }
