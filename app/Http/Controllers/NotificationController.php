@@ -85,7 +85,7 @@ class NotificationController extends Controller
 
         $notification->update(['read' => true]);
 
-        return response()->json(NotificationResource::make($notification));
+        return response()->json(['message' => 'Marcada como leída.']);
     }
 
     public function markAllRead(Request $request): JsonResponse
