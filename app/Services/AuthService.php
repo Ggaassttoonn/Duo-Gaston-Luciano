@@ -190,11 +190,11 @@ class AuthService implements AuthServiceInterface
             try {
                 app('files')->link(storage_path('app/public'), $publicPath);
             } catch (\Exception $e) {
-                return Storage::disk('public')->url('fotos/' . $filename);
+                return request()->getSchemeAndHttpHost() . '/storage/fotos/' . $filename;
             }
         }
 
-        return Storage::disk('public')->url('fotos/' . $filename);
+        return request()->getSchemeAndHttpHost() . '/storage/fotos/' . $filename;
     }
 
     private function deleteOldFoto(?string $fotoUrl): void
@@ -203,10 +203,9 @@ class AuthService implements AuthServiceInterface
             return;
         }
 
-        $prefix = rtrim(Storage::disk('public')->url(''), '/') . '/';
-        $relativePath = str_replace($prefix, '', $fotoUrl);
-
+        $relativePath = parse_url($fotoUrl, PHP_URL_PATH);
         if ($relativePath) {
+            $relativePath = ltrim($relativePath, '/');
             $filepath = storage_path('app/public/' . $relativePath);
             if (file_exists($filepath)) {
                 unlink($filepath);
