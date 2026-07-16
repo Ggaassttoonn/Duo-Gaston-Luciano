@@ -45,12 +45,22 @@ class SentReportController extends Controller
 
         $report->load('docente', 'planilla');
 
+        $notificationData = [];
+        if (!empty($data['audio_base64'])) {
+            $notificationData['audio_base64'] = $data['audio_base64'];
+            $notificationData['audio_mime'] = $data['audio_mime'] ?? 'audio/webm';
+        }
+        if (!empty($data['comentario'])) {
+            $notificationData['comentario'] = $data['comentario'];
+        }
+
         Notification::create([
             'user_id' => $data['docente_id'],
             'type' => 'reporte_recibido',
             'title' => 'Nuevo reporte recibido',
             'message' => $data['comentario'] ?: 'Tu director te envió un reporte.',
             'planilla_id' => $data['planilla_id'] ?? null,
+            'data' => $notificationData,
         ]);
 
         return response()->json(SentReportResource::make($report), 201);
