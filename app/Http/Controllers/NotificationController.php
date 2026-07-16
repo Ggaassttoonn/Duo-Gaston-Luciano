@@ -24,6 +24,9 @@ class NotificationController extends Controller
         if (!isset($input['title']) && isset($input['titulo'])) {
             $input['title'] = $input['titulo'];
         }
+        if (!isset($input['type']) && isset($input['tipo'])) {
+            $input['type'] = $input['tipo'];
+        }
         $request->merge($input);
 
         $data = $request->validate([
