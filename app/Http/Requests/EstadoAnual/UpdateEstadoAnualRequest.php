@@ -16,7 +16,7 @@ class UpdateEstadoAnualRequest extends FormRequest
         return [
             'estado'                 => 'sometimes|required|string|max:100',
             'fecha'                  => 'sometimes|required|date',
-            'planificacion_anual_id' => 'sometimes|required|exists:planificaciones_anuales,id',
+            'planificacion_anual_id' => 'sometimes|required|exists:planificacion_anual,id',
         ];
     }
 }

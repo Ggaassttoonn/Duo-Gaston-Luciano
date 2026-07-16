@@ -19,7 +19,9 @@ class PlanificacionDiariaController extends Controller
     public function index(Request $request): JsonResponse
     {
         $search = $request->query('search');
-        $planificaciones = $this->planificacionDiariaService->getAllPaginated(15, $search);
+        $user = $request->user();
+        $personaCargoCursadoIds = $this->getPersonaCargoCursadoIds($user);
+        $planificaciones = $this->planificacionDiariaService->getAllPaginated(15, $search, $personaCargoCursadoIds);
         return PlanificacionDiariaResource::collection($planificaciones)->response();
     }
 
@@ -47,5 +49,23 @@ class PlanificacionDiariaController extends Controller
     {
         $this->planificacionDiariaService->delete($planificacionDiaria);
         return response()->json(['message' => 'Planificación diaria eliminada exitosamente']);
+    }
+
+    private function getPersonaCargoCursadoIds($user): ?array
+    {
+        if (!$user->persona) {
+            return [];
+        }
+
+        return $user->persona
+            ->cargos()
+            ->with('personaCargoCursados')
+            ->get()
+            ->pluck('personaCargoCursados')
+            ->flatten()
+            ->pluck('id')
+            ->unique()
+            ->values()
+            ->toArray();
     }
 }

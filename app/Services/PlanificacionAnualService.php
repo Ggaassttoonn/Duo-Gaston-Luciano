@@ -17,9 +17,10 @@ class PlanificacionAnualService implements PlanificacionAnualServiceInterface
 
     public function getAllPaginated(
         int $perPage = 15,
-        ?string $search = null
+        ?string $search = null,
+        ?array $personaCargoCursadoIds = null
     ): LengthAwarePaginator {
-        return $this->planificacionAnualRepository->getAllPaginated($perPage, $search);
+        return $this->planificacionAnualRepository->getAllPaginated($perPage, $search, $personaCargoCursadoIds);
     }
 
     public function getById(

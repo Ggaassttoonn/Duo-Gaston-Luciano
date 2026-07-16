@@ -19,7 +19,9 @@ class PlanificacionAnualController extends Controller
     public function index(Request $request): JsonResponse
     {
         $search = $request->query('search');
-        $planificaciones = $this->planificacionAnualService->getAllPaginated(15, $search);
+        $user = $request->user();
+        $personaCargoCursadoIds = $this->getPersonaCargoCursadoIds($user);
+        $planificaciones = $this->planificacionAnualService->getAllPaginated(15, $search, $personaCargoCursadoIds);
         return PlanificacionAnualResource::collection($planificaciones)->response();
     }
 
@@ -47,5 +49,23 @@ class PlanificacionAnualController extends Controller
     {
         $this->planificacionAnualService->delete($planificacionAnual);
         return response()->json(['message' => 'Planificación anual eliminada exitosamente']);
+    }
+
+    private function getPersonaCargoCursadoIds($user): ?array
+    {
+        if (!$user->persona) {
+            return [];
+        }
+
+        return $user->persona
+            ->cargos()
+            ->with('personaCargoCursados')
+            ->get()
+            ->pluck('personaCargoCursados')
+            ->flatten()
+            ->pluck('id')
+            ->unique()
+            ->values()
+            ->toArray();
     }
 }

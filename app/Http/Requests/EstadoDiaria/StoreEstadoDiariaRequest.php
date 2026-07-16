@@ -16,7 +16,7 @@ class StoreEstadoDiariaRequest extends FormRequest
         return [
             'estado'                  => 'required|string|max:100',
             'fecha'                   => 'required|date',
-            'planificacion_diaria_id' => 'required|exists:planificaciones_diarias,id', // Asegurarte de que este sea el nombre de tu tabla
+            'planificacion_diaria_id' => 'required|exists:planificacion_diaria,id',
         ];
     }
 }

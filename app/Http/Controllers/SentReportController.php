@@ -12,10 +12,19 @@ class SentReportController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $reports = SentReport::where('director_id', $request->user()->id)
-            ->with('docente', 'planilla')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $user = $request->user();
+
+        if (in_array($user->role, ['admin', 'director'])) {
+            $reports = SentReport::where('director_id', $user->id)
+                ->with('docente', 'planilla')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else {
+            $reports = SentReport::where('docente_id', $user->id)
+                ->with('director', 'planilla')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
 
         return SentReportResource::collection($reports)->response();
     }

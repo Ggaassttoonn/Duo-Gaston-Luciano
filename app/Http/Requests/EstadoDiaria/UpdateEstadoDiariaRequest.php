@@ -16,7 +16,7 @@ class UpdateEstadoDiariaRequest extends FormRequest
         return [
             'estado'                  => 'sometimes|required|string|max:100',
             'fecha'                   => 'sometimes|required|date',
-            'planificacion_diaria_id' => 'sometimes|required|exists:planificaciones_diarias,id',
+            'planificacion_diaria_id' => 'sometimes|required|exists:planificacion_diaria,id',
         ];
     }
 }

@@ -16,9 +16,10 @@ class PlanificacionDiariaService implements PlanificacionDiariaServiceInterface
 
     public function getAllPaginated(
         int $perPage = 15,
-        ?string $search = null
+        ?string $search = null,
+        ?array $personaCargoCursadoIds = null
     ): LengthAwarePaginator {
-        return $this->planificacionDiariaRepository->getAllPaginated($perPage, $search);
+        return $this->planificacionDiariaRepository->getAllPaginated($perPage, $search, $personaCargoCursadoIds);
     }
 
     public function getById(

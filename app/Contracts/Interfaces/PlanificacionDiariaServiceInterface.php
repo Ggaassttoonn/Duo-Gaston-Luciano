@@ -9,7 +9,8 @@ interface PlanificacionDiariaServiceInterface
 {
     public function getAllPaginated(
         int $perPage = 15,
-        ?string $search = null
+        ?string $search = null,
+        ?array $personaCargoCursadoIds = null
     ): LengthAwarePaginator;
 
     public function getById(
