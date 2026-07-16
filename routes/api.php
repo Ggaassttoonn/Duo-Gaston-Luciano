@@ -43,12 +43,11 @@ Route::get('/setup-admin', function () {
         ]
     );
 
-    \App\Models\Users::firstOrCreate(
+    \App\Models\Users::updateOrCreate(
         ['email' => 'admin@admin.com'],
         [
             'persona_id' => $adminPersona->id,
             'name'       => 'Administrador',
-            'email'      => 'admin@admin.com',
             'password'   => 'admin123',
             'role'       => 'admin',
         ]
@@ -66,18 +65,17 @@ Route::get('/setup-admin', function () {
         ]
     );
 
-    \App\Models\Users::firstOrCreate(
+    \App\Models\Users::updateOrCreate(
         ['email' => 'klee54319@gmail.com'],
         [
             'persona_id' => $dirPersona->id,
             'name'       => 'Ggaassttoonn',
-            'email'      => 'klee54319@gmail.com',
             'password'   => 'admin123',
             'role'       => 'director',
         ]
     );
 
-    return response()->json(['message' => 'Usuarios creados. Admin: admin@admin.com / Director: klee54319@gmail.com / Pass ambos: admin123']);
+    return response()->json(['message' => 'Usuarios creados/actualizados. Admin: admin@admin.com / Director: klee54319@gmail.com / Pass ambos: admin123']);
 });
 
 Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
