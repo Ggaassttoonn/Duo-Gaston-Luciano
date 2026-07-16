@@ -42,6 +42,9 @@ class PlanillaRevisionController extends Controller
 
         $planilla = Planilla::find($data['planilla_id']);
         if ($planilla) {
+            $planilla->estado = $data['estado'];
+            $planilla->save();
+
             $notificationData = [];
             if (!empty($revision->audio_base64)) {
                 $notificationData['audio_base64'] = $revision->audio_base64;
