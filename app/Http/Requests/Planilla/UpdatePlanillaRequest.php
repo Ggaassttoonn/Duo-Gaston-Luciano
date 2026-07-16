@@ -14,8 +14,8 @@ class UpdatePlanillaRequest extends FormRequest
     public function prepareForValidation(): void
     {
         $this->merge([
-            'titulo'    => $this->titulo ?? $this->title ?? null,
-            'contenido' => $this->contenido ?? $this->content ?? null,
+            'titulo'    => $this->input('titulo') ?? $this->input('title') ?? null,
+            'contenido' => $this->input('contenido') ?? $this->input('content') ?? null,
         ]);
     }
 
