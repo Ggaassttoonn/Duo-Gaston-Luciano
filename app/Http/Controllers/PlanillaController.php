@@ -49,20 +49,36 @@ class PlanillaController extends Controller
 
     public function store(StorePlanillaRequest $request): JsonResponse
     {
-        $data = $this->normalizePlanillaData($request->validated());
-        $data['user_id'] = $request->user()->id;
+        try {
+            $data = $this->normalizePlanillaData($request->validated());
+            $data['user_id'] = $request->user()->id;
 
-        $planilla = $this->planillaService->create($data);
+            $planilla = $this->planillaService->create($data);
 
-        return response()->json(PlanillaResource::make($planilla), 201);
+            return response()->json(PlanillaResource::make($planilla), 201);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Error al crear planilla.',
+                'error' => $e->getMessage(),
+                'file' => basename($e->getFile()) . ':' . $e->getLine(),
+            ], 500);
+        }
     }
 
     public function update(UpdatePlanillaRequest $request, Planilla $planilla): JsonResponse
     {
-        $data = $this->normalizePlanillaData($request->validated());
-        $planilla = $this->planillaService->update($planilla->id, $data);
+        try {
+            $data = $this->normalizePlanillaData($request->validated());
+            $planilla = $this->planillaService->update($planilla->id, $data);
 
-        return response()->json(PlanillaResource::make($planilla));
+            return response()->json(PlanillaResource::make($planilla));
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Error al actualizar planilla.',
+                'error' => $e->getMessage(),
+                'file' => basename($e->getFile()) . ':' . $e->getLine(),
+            ], 500);
+        }
     }
 
     public function recibidas(Request $request): JsonResponse
