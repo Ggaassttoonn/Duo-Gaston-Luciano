@@ -113,8 +113,13 @@ Route::middleware('auth:sanctum')->group(function () {
         }
 
         $targetUser = Users::findOrFail($id);
-        if (in_array($targetUser->role, ['admin', 'director'])) {
-            return response()->json(['message' => 'No se puede eliminar a otro administrador.'], 403);
+
+        if ($targetUser->id === $authUser->id) {
+            return response()->json(['message' => 'No podés eliminarte a vos mismo.'], 403);
+        }
+
+        if ($authUser->role !== 'admin' && in_array($targetUser->role, ['admin', 'director'])) {
+            return response()->json(['message' => 'Solo un administrador puede eliminar a otro administrador o director.'], 403);
         }
 
         $targetUser->delete();
@@ -128,8 +133,13 @@ Route::middleware('auth:sanctum')->group(function () {
         }
 
         $targetUser = Users::findOrFail($id);
-        if (in_array($targetUser->role, ['admin', 'director'])) {
-            return response()->json(['message' => 'No se puede cambiar el rol de otro administrador.'], 403);
+
+        if ($targetUser->id === $authUser->id) {
+            return response()->json(['message' => 'No podés cambiar tu propio rol.'], 403);
+        }
+
+        if ($authUser->role !== 'admin' && in_array($targetUser->role, ['admin', 'director'])) {
+            return response()->json(['message' => 'Solo un administrador puede cambiar el rol de otro administrador o director.'], 403);
         }
 
         $validated = $request->validate(['role' => 'required|string|in:docente,admin,director']);
