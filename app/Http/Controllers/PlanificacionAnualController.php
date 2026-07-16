@@ -9,9 +9,12 @@ use App\Http\Resources\PlanificacionAnualResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Contracts\Interfaces\PlanificacionAnualServiceInterface;
+use App\Traits\ResolvesPersonaCargoCursadoIds;
 
 class PlanificacionAnualController extends Controller
 {
+    use ResolvesPersonaCargoCursadoIds;
+
     public function __construct(
         private PlanificacionAnualServiceInterface $planificacionAnualService
     ) {}
@@ -51,21 +54,4 @@ class PlanificacionAnualController extends Controller
         return response()->json(['message' => 'Planificación anual eliminada exitosamente']);
     }
 
-    private function getPersonaCargoCursadoIds($user): ?array
-    {
-        if (!$user->persona) {
-            return [];
-        }
-
-        return $user->persona
-            ->cargos()
-            ->with('personaCargoCursados')
-            ->get()
-            ->pluck('personaCargoCursados')
-            ->flatten()
-            ->pluck('id')
-            ->unique()
-            ->values()
-            ->toArray();
-    }
 }

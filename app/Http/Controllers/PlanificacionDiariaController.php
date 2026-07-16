@@ -9,9 +9,12 @@ use App\Http\Resources\PlanificacionDiariaResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Contracts\Interfaces\PlanificacionDiariaServiceInterface;
+use App\Traits\ResolvesPersonaCargoCursadoIds;
 
 class PlanificacionDiariaController extends Controller
 {
+    use ResolvesPersonaCargoCursadoIds;
+
     public function __construct(
         private PlanificacionDiariaServiceInterface $planificacionDiariaService
     ) {}
@@ -51,21 +54,4 @@ class PlanificacionDiariaController extends Controller
         return response()->json(['message' => 'Planificación diaria eliminada exitosamente']);
     }
 
-    private function getPersonaCargoCursadoIds($user): ?array
-    {
-        if (!$user->persona) {
-            return [];
-        }
-
-        return $user->persona
-            ->cargos()
-            ->with('personaCargoCursados')
-            ->get()
-            ->pluck('personaCargoCursados')
-            ->flatten()
-            ->pluck('id')
-            ->unique()
-            ->values()
-            ->toArray();
-    }
 }

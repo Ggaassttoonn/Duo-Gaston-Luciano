@@ -14,8 +14,9 @@ class PersonaCargoCursadoRepository implements PersonaCargoCursadoRepositoryInte
     public function getAllPaginated(int $perPage = 15): LengthAwarePaginator
     {
         return PersonaCargoCursado::with([
-            'personaCargo',
-            'cursado',
+            'personaCargo.persona',
+            'personaCargo.cargo',
+            'cursado.curso',
         ])->paginate($perPage);
     }
 

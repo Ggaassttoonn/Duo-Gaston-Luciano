@@ -7,23 +7,19 @@ use App\Models\Assignment;
 use App\Models\Deadline;
 use App\Models\PlanificacionAnual;
 use App\Models\PlanificacionDiaria;
+use App\Traits\ResolvesPersonaCargoCursadoIds;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class CalendarioController extends Controller
 {
+    use ResolvesPersonaCargoCursadoIds;
+
     public function index(): JsonResponse
     {
         $user = Auth::user();
 
-        $personaCargoCursadosIds = $user->persona
-            ->cargos()
-            ->with('personaCargoCursados')
-            ->get()
-            ->pluck('personaCargoCursados')
-            ->flatten()
-            ->pluck('id')
-            ->unique();
+        $personaCargoCursadosIds = $this->getPersonaCargoCursadoIds($user);
 
         $diarias = PlanificacionDiaria::with([
             'estadosDiarios',
@@ -45,7 +41,8 @@ class CalendarioController extends Controller
             ->get();
 
         if (in_array($user->role, ['admin', 'director'], true)) {
-            $entregas = Deadline::where('director_id', $user->id)
+            $entregas = Deadline::with(['assignments.user'])
+                ->where('director_id', $user->id)
                 ->orderBy('fecha_limite')
                 ->get();
         } else {

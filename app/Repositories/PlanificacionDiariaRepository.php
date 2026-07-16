@@ -40,7 +40,9 @@ class PlanificacionDiariaRepository implements PlanificacionDiariaRepositoryInte
     public function getById(PlanificacionDiaria $planificacionDiaria): PlanificacionDiaria
     {
         return $planificacionDiaria->load([
-            'personaCargoCursado',
+            'personaCargoCursado.personaCargo.persona',
+            'personaCargoCursado.personaCargo.cargo',
+            'personaCargoCursado.cursado.curso',
             'estadosDiarios',
         ]);
     }

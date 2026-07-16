@@ -14,8 +14,9 @@ class PersonaCargoCursadoService implements PersonaCargoCursadoServiceInterface
         int $perPage = 15
     ): LengthAwarePaginator {
         return PersonaCargoCursado::with([
-            'personaCargo',
-            'cursado',
+            'personaCargo.persona',
+            'personaCargo.cargo',
+            'cursado.curso',
         ])->paginate($perPage);
     }
 
@@ -23,8 +24,9 @@ class PersonaCargoCursadoService implements PersonaCargoCursadoServiceInterface
         PersonaCargoCursado $personaCargoCursado
     ): PersonaCargoCursado {
         return $personaCargoCursado->load([
-            'personaCargo',
-            'cursado',
+            'personaCargo.persona',
+            'personaCargo.cargo',
+            'cursado.curso',
             'planificacionesAnuales',
             'planificacionesDiarias',
         ]);

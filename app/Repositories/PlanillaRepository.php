@@ -32,30 +32,25 @@ class PlanillaRepository implements PlanillaRepositoryInterface
 
     public function getByDirectorId(int $directorId, ?string $search = null, ?int $docenteId = null): Collection
     {
-        $query = PlanillaDestinatario::with('planilla.user')
-            ->where('director_id', $directorId);
+        $planillaIds = PlanillaDestinatario::where('director_id', $directorId)
+            ->pluck('planilla_id')
+            ->unique();
+
+        $query = Planilla::with('destinatarios.director', 'user')
+            ->whereIn('id', $planillaIds);
 
         if ($docenteId !== null) {
-            $query->whereHas('planilla', function ($planillaQuery) use ($docenteId) {
-                $planillaQuery->where('user_id', $docenteId);
-            });
+            $query->where('user_id', $docenteId);
         }
 
         if ($search) {
-            $query->whereHas('planilla', function ($planillaQuery) use ($search) {
-                $planillaQuery->where('titulo', 'like', "%{$search}%")
+            $query->where(function ($q) use ($search) {
+                $q->where('titulo', 'like', "%{$search}%")
                     ->orWhere('contenido', 'like', "%{$search}%");
             });
         }
 
-        return new Collection(
-            $query->orderBy('created_at', 'desc')
-                ->get()
-                ->pluck('planilla')
-                ->unique('id')
-                ->values()
-                ->all()
-        );
+        return $query->orderBy('created_at', 'desc')->get();
     }
 
     public function findById(int $id): ?Planilla

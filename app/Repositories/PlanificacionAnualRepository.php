@@ -46,7 +46,9 @@ class PlanificacionAnualRepository implements PlanificacionAnualRepositoryInterf
     {
         return $planificacionAnual->load([
             'area',
-            'personaCargoCursado',
+            'personaCargoCursado.personaCargo.persona',
+            'personaCargoCursado.personaCargo.cargo',
+            'personaCargoCursado.cursado.curso',
             'estadosAnuales',
         ]);
     }
