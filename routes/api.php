@@ -91,15 +91,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/preferences', [AuthController::class, 'getPreferences'])->name('auth.preferences');
     Route::put('/auth/preferences', [AuthController::class, 'updatePreferences'])->name('auth.preferences.update');
 
-    Route::get('/users', function (Request $request) {
-        $users = Users::select('id', 'name', 'email', 'role', 'foto', 'persona_id', 'created_at')->get();
-        $host = $request->getSchemeAndHttpHost();
-        $users->each(function ($user) use ($host) {
-            if ($user->foto && str_starts_with($user->foto, 'http://localhost')) {
-                $user->foto = str_replace(['http://localhost:8000', 'http://localhost'], $host, $user->foto);
-            }
-        });
-        return $users;
+    Route::get('/users', function () {
+        return Users::select('id', 'name', 'email', 'role', 'foto', 'persona_id', 'created_at')->get();
     });
 
     Route::get('/users/{id}/photo', function ($id) {
@@ -107,12 +100,9 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json(['foto' => $user->foto]);
     });
 
-    Route::get('/users/{id}', function (Request $request, $id) {
+    Route::get('/users/{id}', function ($id) {
         $user = Users::select('id', 'name', 'email', 'role', 'foto', 'persona_id', 'created_at')->findOrFail($id);
         $user->load('persona');
-        if ($user->foto && str_starts_with($user->foto, 'http://localhost')) {
-            $user->foto = str_replace(['http://localhost:8000', 'http://localhost'], $request->getSchemeAndHttpHost(), $user->foto);
-        }
         return $user;
     });
 

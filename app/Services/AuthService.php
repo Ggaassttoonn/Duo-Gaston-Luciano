@@ -8,7 +8,6 @@ use App\Models\Users;
 use App\Http\Resources\UsersResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
@@ -96,13 +95,9 @@ class AuthService implements AuthServiceInterface
 
         if (array_key_exists('foto', $data)) {
             if (is_null($data['foto'])) {
-                $oldFoto = $user->foto;
                 $user->foto = null;
-                $this->deleteOldFoto($oldFoto);
             } else {
-                $oldFoto = $user->foto;
                 $user->foto = $this->saveFoto($data['foto']);
-                $this->deleteOldFoto($oldFoto);
             }
         }
 
@@ -169,48 +164,7 @@ class AuthService implements AuthServiceInterface
             ]);
         }
 
-        $extension = '';
-        if (preg_match('/^data:image\/(\w+);base64,/', $dataUrl, $matches)) {
-            $extension = strtolower($matches[1]);
-        }
-
-        $dir = storage_path('app/public/fotos');
-        $filename = uniqid() . '.' . $extension;
-        $filepath = $dir . DIRECTORY_SEPARATOR . $filename;
-
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-        }
-
-        file_put_contents($filepath, $imageData);
-
-        $publicPath = public_path('storage');
-
-        if (!file_exists($publicPath)) {
-            try {
-                app('files')->link(storage_path('app/public'), $publicPath);
-            } catch (\Exception $e) {
-                return request()->getSchemeAndHttpHost() . '/storage/fotos/' . $filename;
-            }
-        }
-
-        return request()->getSchemeAndHttpHost() . '/storage/fotos/' . $filename;
-    }
-
-    private function deleteOldFoto(?string $fotoUrl): void
-    {
-        if (empty($fotoUrl)) {
-            return;
-        }
-
-        $relativePath = parse_url($fotoUrl, PHP_URL_PATH);
-        if ($relativePath) {
-            $relativePath = ltrim($relativePath, '/');
-            $filepath = storage_path('app/public/' . $relativePath);
-            if (file_exists($filepath)) {
-                unlink($filepath);
-            }
-        }
+        return $dataUrl;
     }
 
     public function logout(): void
