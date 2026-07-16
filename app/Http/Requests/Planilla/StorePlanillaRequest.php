@@ -13,10 +13,16 @@ class StorePlanillaRequest extends FormRequest
 
     public function prepareForValidation(): void
     {
-        $this->merge([
-            'titulo'    => $this->input('titulo') ?? $this->input('title') ?? null,
-            'contenido' => $this->input('contenido') ?? $this->input('content') ?? null,
-        ]);
+        $input = $this->all();
+
+        if (!isset($input['titulo']) && isset($input['title'])) {
+            $input['titulo'] = (string) $input['title'];
+        }
+        if (!isset($input['contenido']) && isset($input['content'])) {
+            $input['contenido'] = (string) $input['content'];
+        }
+
+        $this->replace($input);
     }
 
     public function rules(): array
