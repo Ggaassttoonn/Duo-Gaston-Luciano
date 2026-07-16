@@ -145,12 +145,21 @@ class PlanillaService implements PlanillaServiceInterface
                 $planilla->estado = $data['estado'];
                 $planilla->save();
 
+                $notificationData = [];
+                if (!empty($destinatario->audio)) {
+                    $notificationData['audio'] = $destinatario->audio;
+                }
+                if (!empty($destinatario->comentario)) {
+                    $notificationData['comentario'] = $destinatario->comentario;
+                }
+
                 Notification::create([
                     'user_id' => $planilla->user_id,
                     'type' => 'planilla_' . $data['estado'],
                     'title' => 'Planilla ' . ucfirst($data['estado']),
                     'message' => "Tu planilla \"{$planilla->titulo}\" fue {$data['estado']}.",
                     'planilla_id' => $planilla->id,
+                    'data' => $notificationData,
                 ]);
             }
 

@@ -23,6 +23,8 @@ class PlanillaStateController extends Controller
         $data = $request->validate([
             'planilla_id' => 'required|integer|exists:planillas,id',
             'estado' => 'required|string',
+            'comentario' => 'nullable|string',
+            'audio' => 'nullable|string',
         ]);
 
         $data['user_id'] = $request->user()->id;
@@ -37,12 +39,21 @@ class PlanillaStateController extends Controller
             $planilla->estado = $data['estado'];
             $planilla->save();
 
+            $notificationData = [];
+            if (!empty($data['audio'])) {
+                $notificationData['audio'] = $data['audio'];
+            }
+            if (!empty($data['comentario'])) {
+                $notificationData['comentario'] = $data['comentario'];
+            }
+
             Notification::create([
                 'user_id' => $planilla->user_id,
                 'type' => 'planilla_' . $data['estado'],
                 'title' => 'Planilla ' . ucfirst($data['estado']),
                 'message' => "Tu planilla \"{$planilla->titulo}\" fue {$data['estado']}.",
                 'planilla_id' => $planilla->id,
+                'data' => $notificationData,
             ]);
         }
 
