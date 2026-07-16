@@ -20,6 +20,12 @@ class NotificationController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        $raw = $request->all();
+        if (isset($raw['titulo']) && !isset($raw['title'])) {
+            $raw['title'] = $raw['titulo'];
+        }
+        $request->merge($raw);
+
         $data = $request->validate([
             'type' => 'required|string',
             'title' => 'required|string',

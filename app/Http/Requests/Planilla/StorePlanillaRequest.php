@@ -11,6 +11,14 @@ class StorePlanillaRequest extends FormRequest
         return true;
     }
 
+    public function prepareForValidation(): void
+    {
+        $this->merge([
+            'titulo'    => $this->titulo ?? $this->title ?? null,
+            'contenido' => $this->contenido ?? $this->content ?? null,
+        ]);
+    }
+
     public function rules(): array
     {
         return [
