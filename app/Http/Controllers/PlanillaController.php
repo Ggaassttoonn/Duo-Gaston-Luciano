@@ -35,9 +35,21 @@ class PlanillaController extends Controller
         return PlanillaResource::collection($planillas)->response();
     }
 
+    private function normalizePlanillaData(array $data): array
+    {
+        if (empty($data['titulo']) && !empty($data['title'])) {
+            $data['titulo'] = $data['title'];
+        }
+        if (empty($data['contenido']) && !empty($data['content'])) {
+            $data['contenido'] = $data['content'];
+        }
+        unset($data['title'], $data['content']);
+        return $data;
+    }
+
     public function store(StorePlanillaRequest $request): JsonResponse
     {
-        $data = $request->validated();
+        $data = $this->normalizePlanillaData($request->validated());
         $data['user_id'] = $request->user()->id;
 
         $planilla = $this->planillaService->create($data);
@@ -47,7 +59,8 @@ class PlanillaController extends Controller
 
     public function update(UpdatePlanillaRequest $request, Planilla $planilla): JsonResponse
     {
-        $planilla = $this->planillaService->update($planilla->id, $request->validated());
+        $data = $this->normalizePlanillaData($request->validated());
+        $planilla = $this->planillaService->update($planilla->id, $data);
 
         return response()->json(PlanillaResource::make($planilla));
     }
