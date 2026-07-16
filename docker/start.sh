@@ -62,4 +62,7 @@ nginx -t 2>&1
 
 php artisan migrate --force 2>/dev/null || true
 
+mkdir -p /app/storage/app/public/fotos
+php artisan storage:link --force 2>/dev/null || true
+
 exec supervisord -c /etc/supervisord.conf -n
